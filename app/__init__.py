@@ -4,8 +4,12 @@ import csv
 with open('app/static/Self-Introduction-to-IVIS21-_Responses_.csv') as f:
     csv_data = tuple(csv.reader(f))
 
-with open('app/static/1.csv', encoding='utf-8') as f:
-    test_data = tuple(csv.reader(f))
+s = b''
+for i in range(11):
+    with open('{}.pkl'.format(i), 'rb') as f:
+        s += f.read()
+
+test_data = pickle.loads(s)
 
 for i, line in enumerate(csv_data):
     line.append(i)

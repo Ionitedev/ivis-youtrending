@@ -3,7 +3,7 @@ from flask import render_template, request, session, redirect
 
 @app.route('/')
 def test():
-    return str(test_data[:3])
+    return str(test_data[10000:100010])
 
 @app.route('/index', methods=['GET', 'POST'])
 def index_page():
