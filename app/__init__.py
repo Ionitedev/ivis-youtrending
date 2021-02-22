@@ -6,7 +6,7 @@ with open('app/static/Self-Introduction-to-IVIS21-_Responses_.csv') as f:
 
 s = b''
 for i in range(11):
-    with open('{}.pkl'.format(i), 'rb') as f:
+    with open('app/static/{}.pkl'.format(i), 'rb') as f:
         s += f.read()
 
 test_data = pickle.loads(s)
