@@ -1,5 +1,6 @@
 from flask import Flask
 import csv
+import pickle
 
 with open('app/static/Self-Introduction-to-IVIS21-_Responses_.csv') as f:
     csv_data = tuple(csv.reader(f))
