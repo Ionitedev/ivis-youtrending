@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Group Formation</title>
+        <script src="https://d3js.org/d3.v4.js"></script>
+        <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="static/vendor/animate/animate.css">
+        <link rel="stylesheet" type="text/css" href="static/vendor/select2/select2.min.css">
+        <link rel="stylesheet" type="text/css" href="static/vendor/perfect-scrollbar/perfect-scrollbar.css">
+        <link rel="stylesheet" type="text/css" href="static/css/util.css">
+        <link rel="stylesheet" type="text/css" href="static/css/main.css">
+		<link rel="stylesheet" href="static/css/ionicons.min.css">
+    <head>
+    <body>
+        <form action="index" method="post">
+            <div class="limiter"><div class="container-table100"><div class="wrap-table100"><div class="table100 ver1 m-b-110">
+                <div class="table100-head">
+                    <table>
+                        <thead>
+                            <tr class="row100 head">
+                                <th class="cell100 column1"></th>
+                                {% for i in range(12, 24) %}
+                                    <th class="cell100 column{{ i - 10 }}"><br><center><input type="checkbox" name='skill' value={{ i }} {% if i in attr_checked %} checked {% endif %}></center></th>
+                                {% endfor %}
+                                <th class="cell100 column14" id='placeholder'></th>
+                            </tr>
+
+                            <tr class="row100 head">
+                                <th class="cell100 column1">Alias</th>
+                                <th class="cell100 column2"><center><button type='submit' name='order' value='12' style="display: inline; color: #FFF; background: none; border: none;">Information Visualization</button></center></th>
+                                <th class="cell100 column3"><center><button type='submit' name='order' value='13' style="display: inline; color: #FFF; background: none; border: none;">Statistical</button></center></th>
+                                <th class="cell100 column4"><center><button type='submit' name='order' value='14' style="display: inline; color: #FFF; background: none; border: none;">Mathematics</button></center></th>
+                                <th class="cell100 column5"><center><button type='submit' name='order' value='15' style="display: inline; color: #FFF; background: none; border: none;">Drawing and Artistic</button></center></th>
+                                <th class="cell100 column6"><center><button type='submit' name='order' value='16' style="display: inline; color: #FFF; background: none; border: none;">Computer Usage</button></center></th>
+                                <th class="cell100 column7"><center><button type='submit' name='order' value='17' style="display: inline; color: #FFF; background: none; border: none;">Programming</button></center></th>
+                                <th class="cell100 column8"><center><button type='submit' name='order' value='18' style="display: inline; color: #FFF; background: none; border: none;">Computer Graphics</button></center></th>
+                                <th class="cell100 column9"><center><button type='submit' name='order' value='19' style="display: inline; color: #FFF; background: none; border: none;">Human-Computer Interaction</button></center></th>
+                                <th class="cell100 column10"><center><button type='submit' name='order' value='20' style="display: inline; color: #FFF; background: none; border: none;">User Experience Evaluation</button></center></th>
+                                <th class="cell100 column11"><center><button type='submit' name='order' value='21' style="display: inline; color: #FFF; background: none; border: none;">Communication</button></center></th>
+                                <th class="cell100 column12"><center><button type='submit' name='order' value='22' style="display: inline; color: #FFF; background: none; border: none;">Collaboration</button></center></th>
+                                <th class="cell100 column13"><center><button type='submit' name='order' value='23' style="display: inline; color: #FFF; background: none; border: none;">Code Repository</button></center></th>
+                                <th class="cell100 column14" id='placeholder'></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="table100-body js-pscroll">
+                    <table>
+                        <tbody>
+                            {% for line in data %}
+                                {% if loop.index0 > 0 %}
+                                    <tr class="row100 body">
+                                        <td class="cell100 column1"><input type="checkbox" name='member' value='{{ line[27] }}' {% if line[27] in entity_checked %} checked {% endif %}><a target="_blank" href='person?id={{ line[27] }}'> {{ line[1] }} </a><br></td>
+                                        <td colspan="12"><div id='barplot{{ loop.index0 }}'></div></td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div></div></div></div>
+            <center>
+                <br>
+                <a class="btn btn-primary btn-lg mr-md-3 mb-md-0 mb-2" href="index">Reset</a>
+                <input class="btn btn-primary btn-lg mr-md-3 mb-md-0 mb-2" style="height: 48px; cursor: pointer;" type="submit" value="Form A Group" formtarget="_blank">
+            </center>
+        </form>
+        <script>
+            const height = 68, width = 1540, maxValue = 10;
+        </script>
+
+        {% for line in data %}
+            {% if loop.index0 > 0 %}
+                <script>
+                    var data = [[1, {{ line[12] }}], [2, {{ line[13] }}], [3, {{ line[14] }}], [4, {{ line[15] }}], [5, {{ line[16] }}], [6, {{ line[17] }}], [7, {{ line[18] }}], [8, {{ line[19] }}], [9, {{ line[20] }}], [10, {{ line[21] }}], [11, {{ line[22] }}], [12, {{ line[23] }}]];
+
+                    var x = d3.scaleBand()
+                    .range([ 0, width ])
+                    .domain(data.map(function(d) { return d[0]; }))
+                    .padding(0.1);
+
+                    var y = d3.scaleLinear()
+                    .domain([0, maxValue])
+                    .range([ height, 0]);
+
+                    var svg = d3.select("#barplot{{ loop.index0 }}")
+                    .append("svg")
+                        .attr("width", width)
+                        .attr("height", height);
+
+                    svg.selectAll("bar")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                        .attr("x", function(d) { return x(d[0]); })
+                        .attr("y", function(d) { return y(d[1]); })
+                        .attr("width", x.bandwidth())
+                        .attr("height", function(d) { return 150 - y(d[1]); })
+                        .attr("fill", "#69b3a2")
+                </script>
+            {% endif %}
+        {% endfor %}
+
+    </body>
+</html>
