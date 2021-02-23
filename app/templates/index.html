@@ -5,9 +5,10 @@
         <script src="https://d3js.org/d3.v4.js"></script>
         <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
     </head>
-    <body style="height: 98vh;">
+    <body style="height: 95vh;">
         <div id='sidebar' style="float: left; width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
-            <img src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%;">            
+            <img src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%;">   
+
             <form action='/' method='POST' style="margin-left: 15%;">
                 <p style="color: mintcream;">Trending Time:</p>
                 <select name='time' id='select_time' style="font-size: large; width: 80%;">
@@ -39,18 +40,18 @@
                     <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
                 </select>
                 <br><br><br>
-                <center style="margin-left: -18%;"><input type='submit' value='Filter' style="font-size: large;"></center>
-                
+                <center style="margin-left: -18%;"><input type='submit' value='Filter' style="font-size: large;"></center>                
             </form>
+
         </div>
 
         <div id='treemap'></div>
 
-        <script>
+        <script>            
             // set the dimensions and margins of the graph
             var margin = {top: 0, right: 10, bottom: 0, left: 10},
-                width = 1600 - margin.left - margin.right,
-                height = 926 - margin.top - margin.bottom;
+                width = window.innerWidth * 0.83 - margin.left - margin.right,
+                height = window.innerHeight * 0.95 + 20 - margin.top - margin.bottom;
         
             // append the svg object to the body of the page
             var svg = d3.select("#treemap")
@@ -60,60 +61,80 @@
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             
+            // color_value: video_count / sum(video_count) in category top
+            // size_value: color_value * category_count
+            // count: real view count
+
             var data = {
                 "children":[
                     {
                         "name":"food",
                         "children":[
                             {
+                                'title':'title1',
                                 "channel_id":"mister_a",
-                                "value":28,
+                                "count":28,
+                                'color_value':0.6,
+                                'size_value':1.2,
                                 "trending_data":"level3"
                             }, {
+                                'title':'title2',
                                 "channel_id":"mister_ab",
-                                "value":18,
+                                "count":18,
+                                'color_value':0.4,
+                                'size_value':0.8,
                                 "trending_data":"level13"
                             }
                         ],
-                        "colname":"level2"
                     }, {
                         "name":"love",
                         "children":[
                             {
+                                'title':'title3',
                                 "channel_id":"mister_e",
-                                "value":19,
+                                "count":19,
+                                'color_value':0.7,
+                                'size_value':2.1,
                                 "trending_data":"level12"
                             }, {
+                                'title':'title4',
                                 "channel_id":"mister_acb",
-                                "value":8,
+                                "count":8,
+                                'color_value':0.3,
+                                'size_value':0.9,
                                 "trending_data":"level133"
                             }
                         ],
-                        "colname":"level2"
                     }, {
                         "name":"fight",
                         "children":[
                             {
+                                'title':'title5',
                                 "channel_id":"mister_j",
-                                "value":9,
+                                "count":9,
+                                'color_value':0.33,
+                                'size_value':1.32,
                                 "trending_data":"level13"
                             }, {
+                                'title':'title6',
                                 "channel_id":"mister_ab",
-                                "value":18,
+                                "count":18,
+                                'color_value':0.67,
+                                'size_value':2.68,
                                 "trending_data":"level123"
                             }
                         ],
-                        "colname":"level2"
                     }
                 ]
             };
-            var root = d3.hierarchy(data).sum(function(d){ return d.value}) // Here the size of each leave is given in the 'value' field in input data
+            
+            var root = d3.hierarchy(data).sum(function(d){ return d.size_value}) // Here the size of each leave is given in the 'value' field in input data
         
             // Give the data to this cluster layout:
             d3.treemap()
                 .size([width, height])
                 .paddingTop(28)
-                .paddingRight(7)
+                .paddingRight(8)
                 .paddingInner(1)      // Padding between each rectangle
                 //.paddingOuter(6)
                 //.padding(20)
@@ -125,8 +146,8 @@
         
             // And a opacity scale
             var opacity = d3.scaleLinear()
-                .domain([10, 30])
-                .range([.5,1])
+                .domain([0.2, 0.5])
+                .range([0.6, 0.9])
         
             var Tooltip = d3.select("#treemap")
                 .append("div")
@@ -146,24 +167,26 @@
             var mouseover = function(d) {
                 Tooltip
                     .style("opacity", 1)
-                d3.select(this)
-                    .style("stroke", "black")
-                    .style("opacity", 1);
+                // d3.select(this)
+                //     .style("stroke", "black")
+                //     .style("opacity", 1);
                 return Tooltip.style('visibility', 'visible').text(d.data["channel_id"])
         
             }
             var mousemove = function(d) {
                 Tooltip
-                    .html("Trending_data:" +d.data["trending_data"]+"<br> Next attr")
-                    .style("left", (parseInt(d3.select(this).attr("x")) + 400) + "px")
+                    .html(
+                        "Trending_data:" +d.data["trending_data"]+"<br> Next attr<br>more lines<br>more lines"
+                    )
+                    .style("left", (parseInt(d3.select(this).attr("x")) + window.innerWidth * 0.15 + 15) + "px")
                     .style("top", d3.select(this).attr("y")  + "px")
             }
             var mouseleave = function(d) {
                 Tooltip
                     .style("opacity", 0)
-                d3.select(this)
-                    .style("stroke", "none")
-                    .style("opacity", 0.8)
+                // d3.select(this)
+                //     .style("stroke", "none")
+                //     .style("opacity", 0.8)
             }
         
             // use this information to add rectangles:
@@ -182,22 +205,9 @@
                 .on("mouseleave", mouseleave)
                 .style("stroke", "black")
                 .style("fill", function(d){ return color(d.parent.data.name)} )
-                .style("opacity", function(d){ return opacity(d.data["value"])})
+                .style("opacity", function(d){ return opacity(d.data.color_value)})
         
-            // and to add the text labels
-            svg
-                .selectAll("text")
-                .data(root.leaves())
-                .enter()
-                .append("text")
-                .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
-                .attr("y", function(d){ return d.y0+5})    // +20 to adjust position (lower)
-                //.text(function(d){ return "category:"+d.parent.data["name"];})
-                //.text(function(d){ return d.data["channel_id"] })
-                .attr("font-size", "15px")
-                .attr("fill", "white")
-        
-        
+            // video title
             svg
                 .selectAll("id")
                 .data(root.leaves())
@@ -206,23 +216,11 @@
                 .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
                 .attr("y", function(d){ return d.y0+5})    // +20 to adjust position (lower)
                 //.text(function(d){ return d.parent.data["name"];})
-                .text(function(d){ return "channel_id:"+d.data["channel_id"] })
+                .text(function(d){ return d.data.title })
                 .attr("font-size", "15px")
                 .attr("fill", "white")
         
-            // and to add the text labels
-            svg
-                .selectAll("vals")
-                .data(root.leaves())
-                .enter()
-                .append("text")
-                .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
-                .attr("y", function(d){ return d.y0+45})    // +20 to adjust position (lower)
-                .text(function(d){ return "Count:"+ d.data.value })
-                .attr("font-size", "15px")
-                .attr("fill", "white")
-        
-            // Add title for the 3 groups
+            // category name
             svg
                 .selectAll("titles")
                 .data(root.descendants().filter(function(d){return d.depth==1}))
@@ -232,10 +230,11 @@
                 .attr("y", function(d){ return d.y0})
                 .text(function(d){ return d.data.name; })
                 .attr("font-size", "20px")
+                .attr('font-weight', 'bold')
                 .attr("fill",  function(d){ return color(d.data.name)} )
                 .on("click", function(d) {
                     var f = document.createElement('form');
-                    f.setAttribute('style', 'visibility: hidden');
+                    f.setAttribute('style', 'visibility: hidden;');
                     f.setAttribute('method', 'post');
                     f.setAttribute('action', '/category');
 
@@ -248,6 +247,13 @@
                         s.setAttribute('value', document.getElementById('select_' + filter[i]).value);
                         f.appendChild(s);
                     }
+
+                    var s = document.createElement("input");
+                    s.setAttribute('style', 'visibility: hidden');
+                    s.setAttribute('type', "text");
+                    s.setAttribute('name', 'category');
+                    s.setAttribute('value', d.data.name);
+                    f.appendChild(s);
 
                     document.body.appendChild(f);
                     f.submit();

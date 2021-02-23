@@ -34,4 +34,4 @@ def index_page():
 @app.route('/category', methods=['POST'])
 def category_page():
     selected = [request.form['time'], request.form['country'], request.form['lang']]
-    return render_template('index.html', selected=selected)
+    return 'To be completed.<br> Category: ' + request.form['category'] + '<br><a href=\'/\'>Homepage</a>'
