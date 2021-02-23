@@ -1,1 +1,1 @@
-IVIS Project 1: Visualize Student Group Formation based on Individual Skills and Interests
+DH2321 Final Project: Youtube Trending Visualization
