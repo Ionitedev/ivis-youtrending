@@ -72,18 +72,24 @@
                         "children":[
                             {
                                 'title':'title1',
-                                "channel_id":"mister_a",
+                                "channel":"mister_a",
                                 "count":28,
                                 'color_value':0.6,
                                 'size_value':1.2,
-                                "trending_data":"level3"
+                                'pubdate':'1999-08-31',
+                                "trenddate1":"1999-09-01",
+                                "trenddate2":"1999-09-05",
+                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
                             }, {
                                 'title':'title2',
-                                "channel_id":"mister_ab",
+                                "channel":"mister_ab",
                                 "count":18,
                                 'color_value':0.4,
                                 'size_value':0.8,
-                                "trending_data":"level13"
+                                'pubdate':'1999-08-31',
+                                "trenddate1":"1999-09-01",
+                                "trenddate2":"1999-09-05",
+                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
                             }
                         ],
                     }, {
@@ -91,18 +97,24 @@
                         "children":[
                             {
                                 'title':'title3',
-                                "channel_id":"mister_e",
+                                "channel":"mister_e",
                                 "count":19,
                                 'color_value':0.7,
                                 'size_value':2.1,
-                                "trending_data":"level12"
+                                'pubdate':'1999-08-31',
+                                "trenddate1":"1999-09-01",
+                                "trenddate2":"1999-09-05",
+                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
                             }, {
                                 'title':'title4',
-                                "channel_id":"mister_acb",
+                                "channel":"mister_acb",
                                 "count":8,
                                 'color_value':0.3,
                                 'size_value':0.9,
-                                "trending_data":"level133"
+                                'pubdate':'1999-08-31',
+                                "trenddate1":"1999-09-01",
+                                "trenddate2":"1999-09-05",
+                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
                             }
                         ],
                     }, {
@@ -110,18 +122,24 @@
                         "children":[
                             {
                                 'title':'title5',
-                                "channel_id":"mister_j",
+                                "channel":"mister_j",
                                 "count":9,
                                 'color_value':0.33,
                                 'size_value':1.32,
-                                "trending_data":"level13"
+                                'pubdate':'1999-08-31',
+                                "trenddate1":"1999-09-01",
+                                "trenddate2":"1999-09-05",
+                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
                             }, {
                                 'title':'title6',
-                                "channel_id":"mister_ab",
+                                "channel":"mister_ab",
                                 "count":18,
                                 'color_value':0.67,
                                 'size_value':2.68,
-                                "trending_data":"level123"
+                                'pubdate':'1999-08-31',
+                                "trenddate1":"1999-09-01",
+                                "trenddate2":"1999-09-05",
+                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
                             }
                         ],
                     }
@@ -162,28 +180,34 @@
                 .style('visibility', 'hidden')
                 .style('font-size', '12px')
                 .style('font-weight', 'bold')
+                .style('width', '180px')
                 .text('')
             // Three function that change the tooltip when user hover / move / leave a cell
             var mouseover = function(d) {
                 Tooltip
                     .style("opacity", 1)
+                    .style('visibility', 'visible')
                 // d3.select(this)
                 //     .style("stroke", "black")
                 //     .style("opacity", 1);
-                return Tooltip.style('visibility', 'visible').text(d.data["channel_id"])
-        
-            }
-            var mousemove = function(d) {
-                Tooltip
                     .html(
-                        "Trending_data:" +d.data["trending_data"]+"<br> Next attr<br>more lines<br>more lines"
+                        '<img src=' + d.data.cover_url + ' width=\'100%\' >' + '<br>' +
+                        'Title: ' + d.data.title + '<br>' +
+                        'Channel: ' + d.data.channel + '<br>' +
+                        'Publish date: ' + d.data.pubdate + '<br>' +
+                        'First trending date: ' + d.data.trenddate1 + '<br>' +
+                        'Last trending date: ' + d.data.trenddate2 + '<br>' +
+                        'View: ' + d.data.count
                     )
                     .style("left", (parseInt(d3.select(this).attr("x")) + window.innerWidth * 0.15 + 15) + "px")
-                    .style("top", d3.select(this).attr("y")  + "px")
+                    .style("top", d3.select(this).attr("y")  + "px")        
             }
+            
             var mouseleave = function(d) {
                 Tooltip
                     .style("opacity", 0)
+                    .style("left", "-100%")
+                    .style("top", "-100%")
                 // d3.select(this)
                 //     .style("stroke", "none")
                 //     .style("opacity", 0.8)
@@ -201,7 +225,6 @@
                 .attr('width', function (d) { return (d.x1 - d.x0); })
                 .attr('height', function (d) { return (d.y1 - d.y0); })
                 .on("mouseover", mouseover)
-                .on("mousemove", mousemove)
                 .on("mouseleave", mouseleave)
                 .style("stroke", "black")
                 .style("fill", function(d){ return color(d.parent.data.name)} )
