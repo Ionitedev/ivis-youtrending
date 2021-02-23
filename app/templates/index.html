@@ -1,107 +1,258 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Group Formation</title>
+        <title>Youtube Trending</title>
         <script src="https://d3js.org/d3.v4.js"></script>
         <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
-        <link rel="stylesheet" type="text/css" href="static/vendor/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="static/vendor/animate/animate.css">
-        <link rel="stylesheet" type="text/css" href="static/vendor/select2/select2.min.css">
-        <link rel="stylesheet" type="text/css" href="static/vendor/perfect-scrollbar/perfect-scrollbar.css">
-        <link rel="stylesheet" type="text/css" href="static/css/util.css">
-        <link rel="stylesheet" type="text/css" href="static/css/main.css">
-		<link rel="stylesheet" href="static/css/ionicons.min.css">
-    <head>
-    <body>
-        <form action="index" method="post">
-            <div class="limiter"><div class="container-table100"><div class="wrap-table100"><div class="table100 ver1 m-b-110">
-                <div class="table100-head">
-                    <table>
-                        <thead>
-                            <tr class="row100 head">
-                                <th class="cell100 column1"></th>
-                                {% for i in range(12, 24) %}
-                                    <th class="cell100 column{{ i - 10 }}"><br><center><input type="checkbox" name='skill' value={{ i }} {% if i in attr_checked %} checked {% endif %}></center></th>
-                                {% endfor %}
-                                <th class="cell100 column14" id='placeholder'></th>
-                            </tr>
-
-                            <tr class="row100 head">
-                                <th class="cell100 column1">Alias</th>
-                                <th class="cell100 column2"><center><button type='submit' name='order' value='12' style="display: inline; color: #FFF; background: none; border: none;">Information Visualization</button></center></th>
-                                <th class="cell100 column3"><center><button type='submit' name='order' value='13' style="display: inline; color: #FFF; background: none; border: none;">Statistical</button></center></th>
-                                <th class="cell100 column4"><center><button type='submit' name='order' value='14' style="display: inline; color: #FFF; background: none; border: none;">Mathematics</button></center></th>
-                                <th class="cell100 column5"><center><button type='submit' name='order' value='15' style="display: inline; color: #FFF; background: none; border: none;">Drawing and Artistic</button></center></th>
-                                <th class="cell100 column6"><center><button type='submit' name='order' value='16' style="display: inline; color: #FFF; background: none; border: none;">Computer Usage</button></center></th>
-                                <th class="cell100 column7"><center><button type='submit' name='order' value='17' style="display: inline; color: #FFF; background: none; border: none;">Programming</button></center></th>
-                                <th class="cell100 column8"><center><button type='submit' name='order' value='18' style="display: inline; color: #FFF; background: none; border: none;">Computer Graphics</button></center></th>
-                                <th class="cell100 column9"><center><button type='submit' name='order' value='19' style="display: inline; color: #FFF; background: none; border: none;">Human-Computer Interaction</button></center></th>
-                                <th class="cell100 column10"><center><button type='submit' name='order' value='20' style="display: inline; color: #FFF; background: none; border: none;">User Experience Evaluation</button></center></th>
-                                <th class="cell100 column11"><center><button type='submit' name='order' value='21' style="display: inline; color: #FFF; background: none; border: none;">Communication</button></center></th>
-                                <th class="cell100 column12"><center><button type='submit' name='order' value='22' style="display: inline; color: #FFF; background: none; border: none;">Collaboration</button></center></th>
-                                <th class="cell100 column13"><center><button type='submit' name='order' value='23' style="display: inline; color: #FFF; background: none; border: none;">Code Repository</button></center></th>
-                                <th class="cell100 column14" id='placeholder'></th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div class="table100-body js-pscroll">
-                    <table>
-                        <tbody>
-                            {% for line in data %}
-                                {% if loop.index0 > 0 %}
-                                    <tr class="row100 body">
-                                        <td class="cell100 column1"><input type="checkbox" name='member' value='{{ line[27] }}' {% if line[27] in entity_checked %} checked {% endif %}><a target="_blank" href='person?id={{ line[27] }}'> {{ line[1] }} </a><br></td>
-                                        <td colspan="12"><div id='barplot{{ loop.index0 }}'></div></td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div></div></div></div>
-            <center>
+    </head>
+    <body style="height: 98vh;">
+        <div id='sidebar' style="float: left; width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
+            <img src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%;">            
+            <form action='/' method='POST' style="margin-left: 15%;">
+                <p style="color: mintcream;">Trending Time:</p>
+                <select name='time' id='select_time' style="font-size: large; width: 80%;">
+                    <option value='1w' selected>Last week</option>
+                    <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
+                    <option value='3m' {% if selected[0] == '3m' %} selected {% endif %}>Last 3 months</option>
+                    <option value='all' {% if selected[0] == 'all' %} selected {% endif %}>All</option>
+                </select>
                 <br>
-                <a class="btn btn-primary btn-lg mr-md-3 mb-md-0 mb-2" href="index">Reset</a>
-                <input class="btn btn-primary btn-lg mr-md-3 mb-md-0 mb-2" style="height: 48px; cursor: pointer;" type="submit" value="Form A Group" formtarget="_blank">
-            </center>
-        </form>
+                <p style="color: mintcream;">Country:</p>
+                <select name='country' id='select_country' style="font-size: large; width: 80%;">
+                    <option value='all' {% if selected[1] == 'all' %} selected {% endif %}>All</option>
+                    <option value='br' {% if selected[1] == 'br' %} selected {% endif %}>Brazil</option>
+                    <option value='ca' {% if selected[1] == 'ca' %} selected {% endif %}>Canada</option>
+                    <option value='de' {% if selected[1] == 'de' %} selected {% endif %}>Germany</option>
+                    <option value='fr' {% if selected[1] == 'fr' %} selected {% endif %}>France</option>
+                    <option value='gb' {% if selected[1] == 'gb' %} selected {% endif %}>Great Britain</option>
+                    <option value='in' {% if selected[1] == 'in' %} selected {% endif %}>India</option>
+                    <option value='jp' {% if selected[1] == 'jp' %} selected {% endif %}>Japan</option>
+                    <option value='kr' {% if selected[1] == 'kr' %} selected {% endif %}>South Korea</option>
+                    <option value='mx' {% if selected[1] == 'mx' %} selected {% endif %}>Mexico</option>
+                    <option value='ru' {% if selected[1] == 'ru' %} selected {% endif %}>Russia</option>
+                    <option value='us' {% if selected[1] == 'us' %} selected {% endif %}>United States</option>
+                </select>
+                <br>
+                <p style="color: mintcream;">Language:</p>
+                <select name='lang' id='select_lang' style="font-size: large; width: 80%;">
+                    <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
+                    <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
+                </select>
+                <br><br><br>
+                <center style="margin-left: -18%;"><input type='submit' value='Filter' style="font-size: large;"></center>
+                
+            </form>
+        </div>
+
+        <div id='treemap'></div>
+
         <script>
-            const height = 68, width = 1540, maxValue = 10;
+            // set the dimensions and margins of the graph
+            var margin = {top: 0, right: 10, bottom: 0, left: 10},
+                width = 1600 - margin.left - margin.right,
+                height = 926 - margin.top - margin.bottom;
+        
+            // append the svg object to the body of the page
+            var svg = d3.select("#treemap")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            
+            var data = {
+                "children":[
+                    {
+                        "name":"food",
+                        "children":[
+                            {
+                                "channel_id":"mister_a",
+                                "value":28,
+                                "trending_data":"level3"
+                            }, {
+                                "channel_id":"mister_ab",
+                                "value":18,
+                                "trending_data":"level13"
+                            }
+                        ],
+                        "colname":"level2"
+                    }, {
+                        "name":"love",
+                        "children":[
+                            {
+                                "channel_id":"mister_e",
+                                "value":19,
+                                "trending_data":"level12"
+                            }, {
+                                "channel_id":"mister_acb",
+                                "value":8,
+                                "trending_data":"level133"
+                            }
+                        ],
+                        "colname":"level2"
+                    }, {
+                        "name":"fight",
+                        "children":[
+                            {
+                                "channel_id":"mister_j",
+                                "value":9,
+                                "trending_data":"level13"
+                            }, {
+                                "channel_id":"mister_ab",
+                                "value":18,
+                                "trending_data":"level123"
+                            }
+                        ],
+                        "colname":"level2"
+                    }
+                ]
+            };
+            var root = d3.hierarchy(data).sum(function(d){ return d.value}) // Here the size of each leave is given in the 'value' field in input data
+        
+            // Give the data to this cluster layout:
+            d3.treemap()
+                .size([width, height])
+                .paddingTop(28)
+                .paddingRight(7)
+                .paddingInner(1)      // Padding between each rectangle
+                //.paddingOuter(6)
+                //.padding(20)
+                (root)
+        
+            // prepare a color scale
+            var color = d3.scaleOrdinal()
+                .range([ "#DC143C", "#FF0000", "#FF4500"])
+        
+            // And a opacity scale
+            var opacity = d3.scaleLinear()
+                .domain([10, 30])
+                .range([.5,1])
+        
+            var Tooltip = d3.select("#treemap")
+                .append("div")
+                .style("opacity", 0)
+                .attr("class", "tooltip")
+                .style('position', 'absolute')
+                .style("background-color", "white")
+                .style("border", "solid")
+                .style("border-width", "2px")
+                .style("border-radius", "5px")
+                .style("padding", "5px")
+                .style('visibility', 'hidden')
+                .style('font-size', '12px')
+                .style('font-weight', 'bold')
+                .text('')
+            // Three function that change the tooltip when user hover / move / leave a cell
+            var mouseover = function(d) {
+                Tooltip
+                    .style("opacity", 1)
+                d3.select(this)
+                    .style("stroke", "black")
+                    .style("opacity", 1);
+                return Tooltip.style('visibility', 'visible').text(d.data["channel_id"])
+        
+            }
+            var mousemove = function(d) {
+                Tooltip
+                    .html("Trending_data:" +d.data["trending_data"]+"<br> Next attr")
+                    .style("left", (parseInt(d3.select(this).attr("x")) + 400) + "px")
+                    .style("top", d3.select(this).attr("y")  + "px")
+            }
+            var mouseleave = function(d) {
+                Tooltip
+                    .style("opacity", 0)
+                d3.select(this)
+                    .style("stroke", "none")
+                    .style("opacity", 0.8)
+            }
+        
+            // use this information to add rectangles:
+            //d 是node
+            svg
+                .selectAll("rect")
+                .data(root.leaves())
+                .enter()
+                .append("rect")
+                .attr('x', function (d) { return d.x0; })
+                .attr('y', function (d) { return d.y0-20; })
+                .attr('width', function (d) { return (d.x1 - d.x0); })
+                .attr('height', function (d) { return (d.y1 - d.y0); })
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on("mouseleave", mouseleave)
+                .style("stroke", "black")
+                .style("fill", function(d){ return color(d.parent.data.name)} )
+                .style("opacity", function(d){ return opacity(d.data["value"])})
+        
+            // and to add the text labels
+            svg
+                .selectAll("text")
+                .data(root.leaves())
+                .enter()
+                .append("text")
+                .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
+                .attr("y", function(d){ return d.y0+5})    // +20 to adjust position (lower)
+                //.text(function(d){ return "category:"+d.parent.data["name"];})
+                //.text(function(d){ return d.data["channel_id"] })
+                .attr("font-size", "15px")
+                .attr("fill", "white")
+        
+        
+            svg
+                .selectAll("id")
+                .data(root.leaves())
+                .enter()
+                .append("text")
+                .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
+                .attr("y", function(d){ return d.y0+5})    // +20 to adjust position (lower)
+                //.text(function(d){ return d.parent.data["name"];})
+                .text(function(d){ return "channel_id:"+d.data["channel_id"] })
+                .attr("font-size", "15px")
+                .attr("fill", "white")
+        
+            // and to add the text labels
+            svg
+                .selectAll("vals")
+                .data(root.leaves())
+                .enter()
+                .append("text")
+                .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
+                .attr("y", function(d){ return d.y0+45})    // +20 to adjust position (lower)
+                .text(function(d){ return "Count:"+ d.data.value })
+                .attr("font-size", "15px")
+                .attr("fill", "white")
+        
+            // Add title for the 3 groups
+            svg
+                .selectAll("titles")
+                .data(root.descendants().filter(function(d){return d.depth==1}))
+                .enter()
+                .append("text")
+                .attr("x", function(d){ return d.x0})
+                .attr("y", function(d){ return d.y0})
+                .text(function(d){ return d.data.name; })
+                .attr("font-size", "20px")
+                .attr("fill",  function(d){ return color(d.data.name)} )
+                .on("click", function(d) {
+                    var f = document.createElement('form');
+                    f.setAttribute('style', 'visibility: hidden');
+                    f.setAttribute('method', 'post');
+                    f.setAttribute('action', '/category');
+
+                    var filter = ['time', 'country', 'lang'];
+                    for (var i = 0; i < 3; i++) {
+                        var s = document.createElement("input");
+                        s.setAttribute('style', 'visibility: hidden');
+                        s.setAttribute('type', "text");
+                        s.setAttribute('name', filter[i]);
+                        s.setAttribute('value', document.getElementById('select_' + filter[i]).value);
+                        f.appendChild(s);
+                    }
+
+                    document.body.appendChild(f);
+                    f.submit();
+                })
         </script>
-
-        {% for line in data %}
-            {% if loop.index0 > 0 %}
-                <script>
-                    var data = [[1, {{ line[12] }}], [2, {{ line[13] }}], [3, {{ line[14] }}], [4, {{ line[15] }}], [5, {{ line[16] }}], [6, {{ line[17] }}], [7, {{ line[18] }}], [8, {{ line[19] }}], [9, {{ line[20] }}], [10, {{ line[21] }}], [11, {{ line[22] }}], [12, {{ line[23] }}]];
-
-                    var x = d3.scaleBand()
-                    .range([ 0, width ])
-                    .domain(data.map(function(d) { return d[0]; }))
-                    .padding(0.1);
-
-                    var y = d3.scaleLinear()
-                    .domain([0, maxValue])
-                    .range([ height, 0]);
-
-                    var svg = d3.select("#barplot{{ loop.index0 }}")
-                    .append("svg")
-                        .attr("width", width)
-                        .attr("height", height);
-
-                    svg.selectAll("bar")
-                    .data(data)
-                    .enter()
-                    .append("rect")
-                        .attr("x", function(d) { return x(d[0]); })
-                        .attr("y", function(d) { return y(d[1]); })
-                        .attr("width", x.bandwidth())
-                        .attr("height", function(d) { return 150 - y(d[1]); })
-                        .attr("fill", "#69b3a2")
-                </script>
-            {% endif %}
-        {% endfor %}
-
     </body>
+
 </html>
