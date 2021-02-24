@@ -158,10 +158,27 @@
                 //.paddingOuter(6)
                 //.padding(20)
                 (root)
-        
+            function perc2color(perc) {
+                var r, g, b = 0;
+                if(perc < 50) {
+                    r = 255;
+                    g = Math.round(10.1 * perc);
+                }
+                else {
+                    g = 255;
+                    r = Math.round(510 - 10.10 * perc);
+                }
+                var h = r * 0x10000 + g * 0x100 + b * 0x1;
+                return '#' + ('000000' + h.toString(16)).slice(-6);
+            }
+            var col_bar=[];
+            for(var kk=0;kk<32;kk++)
+            {
+                col_bar.push(perc2color((3*(kk))));
+            }
             // prepare a color scale
-            var color = d3.scaleOrdinal()
-                .range([ "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500"])
+            var color = d3.scaleOrdinal().range(col_bar)
+               // .range([ "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500"])
         
             // And a opacity scale
             var opacity = d3.scaleLinear()
@@ -189,6 +206,7 @@
                 Tooltip
                     .style("opacity", 1)
                     .style('visibility', 'visible')
+                    .attr("font-size","5px")
                 // d3.select(this)
                 //     .style("stroke", "black")
                 //     .style("opacity", 1);
