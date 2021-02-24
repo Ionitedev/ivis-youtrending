@@ -173,14 +173,14 @@
                         'View: ' + d.data.count
                     )
                 
-                if (parseInt(d3.select(this).attr("x")) > window.innerWidth * 0.7) {
-                    Tooltip.style("left", (parseInt(d3.select(this).attr("x")) + 25) + "px")
+                if (parseInt(d3.select(this).attr("x")) > window.innerWidth * 0.65) {
+                    Tooltip.style("left", (parseInt(d3.select(this).attr("x")) - 30) + "px")
                 }
                 else {
                     Tooltip.style("left", (parseInt(d3.select(this).attr("x")) + window.innerWidth * 0.15 + 25) + "px")
                 }
-                if (parseInt(d3.select(this).attr("y")) > window.innerHeight * 0.6) {
-                    Tooltip.style("top", (parseInt(d3.select(this).attr("y")) - 300 )  + "px")
+                if (parseInt(d3.select(this).attr("y")) > window.innerHeight * 0.5) {
+                    Tooltip.style("top", (parseInt(d3.select(this).attr("y")) - 280 )  + "px")
                 }
                 else {
                     Tooltip.style("top", (parseInt(d3.select(this).attr("y")) + 15 )  + "px")
