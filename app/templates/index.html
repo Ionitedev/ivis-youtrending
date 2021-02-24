@@ -85,10 +85,6 @@
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             
-            // color_value: video_count / sum(video_count) in category top
-            // size_value: color_value * category_count
-            // count: real view count
-
             var data = {                
                 "children":[
                 {% for c in feed_data %}
@@ -115,49 +111,6 @@
             };
             
             var root = d3.hierarchy(data).sum(function(d){ return d.size_value}) // Here the size of each leave is given in the 'value' field in input data
-        
-            function wrap(text) {
-                text.each(function () {
-                    var text = d3.select(this),
-                        words = text.text().split(/[\s,|\.]+/).reverse(),
-                        word,
-                        line = [],
-                        lineNumber = 0,
-                        lineHeight = 1.1, // ems
-                        x = text.attr("x"),
-                        y = text.attr("y"),
-                        width = parseInt(text.attr('rect_width')) - 25,
-                        bottom = parseInt(text.attr('rect_bottom')),
-                        dy = 0, //parseFloat(text.attr("dy")),
-                        tspan = text.text(null)
-                            .append("tspan")
-                            .attr("x", x)
-                            .attr("y", y)
-                            .attr("dy", dy + "em");
-                    while (word = words.pop()) {
-                        line.push(word);
-                        tspan.text(line.join(" "));
-                        if (parseInt(tspan.attr('y')) > bottom) {
-                            tspan = text.append("tspan")
-                            .attr("x", x)
-                            .attr("y", y)
-                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                            .text('...');
-                            break;
-                        }
-                        if (tspan.node().getComputedTextLength() > width) {                            
-                            line.pop();
-                            tspan.text(line.join(" "));
-                            line = [word];
-                            tspan = text.append("tspan")
-                                .attr("x", x)
-                                .attr("y", y)
-                                .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                                .text(word);
-                        }
-                    }
-                });
-            }
 
             // Give the data to this cluster layout:
             d3.treemap()
@@ -169,67 +122,23 @@
                 //.padding(20)
                 (root)
 
-            // function perc2color(perc) {
-            //     var r, g, b = 0;
-            //     if(perc < 50) {
-            //         r = 255;
-            //         g = Math.round(10.1 * perc);
-            //     }
-            //     else {
-            //         g = 255;
-            //         r = Math.round(510 - 10.10 * perc);
-            //     }
-            //     var h = r * 0x10000 + g * 0x100 + b * 0x1;
-            //     return '#' + ('000000' + h.toString(16)).slice(-6);
-            // }
-
-            // var col_bar=[];
-            // for(var kk=0;kk<32;kk++)
-            // {
-            //     col_bar.push(perc2color((3*(kk))));
-            // }
-
             // prepare a color scale
             var color = d3.scaleOrdinal()
             .range([
-                "#CD5C5C",
-                "#006400",
-                "#6A5ACD",
-                "#E03D00",
-                "#483D8B",
-                "#DB7093",
-                "#BDB76B",
-                "#A0522D",
-                "#4B0082",
-                "#FF6347",
-                "#DA70D6",
-                "#696969",
-                "#191970",
-                "#228B22",
-                "#800080",
-                "#008B8B",
-                "#32CD32",
-                "#808080",
-                "#C71585",
-                "#B22222",
-                "#2F4F4F",
-                "#556B2F",
-                "#000000",
-                "#BC8F8F",
-                "#DC143C",
-                "#C6A700",
-                "#663399",
-                "#808000",
-                "#00008B",
-                "#A52A2A",
-                "#5F9EA0",
-                "#D2691E"
+                "#CD5C5C", "#006400", "#6A5ACD", "#E03D00",
+                "#483D8B", "#DB7093", "#BDB76B", "#A0522D",
+                "#4B0082", "#FF6347", "#DA70D6", "#696969",
+                "#191970", "#228B22", "#800080", "#008B8B",
+                "#32CD32", "#808080", "#C71585", "#B22222",
+                "#2F4F4F", "#556B2F", "#000000", "#BC8F8F",
+                "#DC143C", "#C6A700", "#663399", "#808000",
+                "#00008B", "#A52A2A", "#5F9EA0", "#D2691E"
             ]);
         
             // And a opacity scale
             var opacity = d3.scaleLinear()
-                .domain([0.33, 0.34])
-                .range([0.8, 1])
+                .domain([0.2, 0.38])
+                .range([0.7, 1])
         
             var Tooltip = d3.select("#treemap")
                 .append("div")
@@ -254,9 +163,6 @@
                     .style("opacity", 1)
                     .style('visibility', 'visible')
                     .attr("font-size","5px")
-                // d3.select(this)
-                //     .style("stroke", "black")
-                //     .style("opacity", 1);
                     .html(
                         '<img src=' + d.data.cover_url + ' width=\'100%\' >' + '<br>' +
                         'Title: ' + d.data.title + '<br>' +
@@ -273,8 +179,8 @@
                 else {
                     Tooltip.style("left", (parseInt(d3.select(this).attr("x")) + window.innerWidth * 0.15 + 25) + "px")
                 }
-                if (parseInt(d3.select(this).attr("y")) > window.innerHeight * 0.7) {
-                    Tooltip.style("top", (parseInt(d3.select(this).attr("y")) - 180 )  + "px")
+                if (parseInt(d3.select(this).attr("y")) > window.innerHeight * 0.6) {
+                    Tooltip.style("top", (parseInt(d3.select(this).attr("y")) - 300 )  + "px")
                 }
                 else {
                     Tooltip.style("top", (parseInt(d3.select(this).attr("y")) + 15 )  + "px")
@@ -286,9 +192,6 @@
                     .style("opacity", 0)
                     .style("left", "-100%")
                     .style("top", "-100%")
-                // d3.select(this)
-                //     .style("stroke", "none")
-                //     .style("opacity", 0.8)
             }
         
             document.getElementById('sidebar').addEventListener("mouseover", mouseleave);
@@ -305,28 +208,23 @@
                 .attr('width', function (d) { return (d.x1 - d.x0); })
                 .attr('height', function (d) { return (d.y1 - d.y0); })
                 .on("mouseover", mouseover)
-                //.on("mousemove", mouseover)
-                //.on("mouseleave", mouseleave)
                 .style("stroke", "black")
                 .style("fill", function(d) { return color(d.parent.data.name) })
                 .style("opacity", function(d) { return opacity(d.data.color_value) })
         
-            // video title
             svg
                 .selectAll("id")
                 .data(root.leaves())
                 .enter()
-                .append("text")
-                .attr("x", function(d) { return d.x0+15 })    // +10 to adjust position (more right)
-                .attr("y", function(d) { return d.y0+5 })    // +20 to adjust position (lower)
-                .attr('rect_width',  function(d) { return d.x1 - d.x0 })
-                .attr('rect_bottom',  function(d) { return d.y1 })
-                //.text(function(d){ return d.parent.data["name"];})
-                .text(function(d) { return d.data.title })
-                .attr("font-size", "15px")
-                .attr("fill", "white")
-                .call(wrap, function(d) { return d.rect_width })
-        
+                .append("foreignObject")
+                .attr("x", function(d) { return d.x0 })
+                .attr("y", function(d) { return d.y0 - 25 })
+                .attr("width", function(d) { return d.x1 - d.x0 })
+                .attr("height", function(d) { return d.y1 - d.y0 })
+                .on("mouseover", mouseover)
+                .append("xhtml:body")
+                .html(function(d) { return '<p style="color: white; font-size: 15px">' + d.data.title + '</p>'})
+
             // category name
             svg
                 .selectAll("titles")

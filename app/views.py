@@ -34,9 +34,10 @@ def index_page():
     for c in selected_category_top:
         for i, v in enumerate(selected_category_top[c]):
             selected_category_top[c][i] = attr_for_homepage(full_data, v)
+        ref_view_count = min(i['count'] for i in selected_category_top[c]) / 5
         for v in selected_category_top[c]:
-            v['color_value'] = math.log(v['count']) / sum(math.log(i['count']) for i in selected_category_top[c])
-            v['size_value'] = v['color_value'] *  math.log(selected_category_count[c])
+            v['color_value'] = math.log(v['count'] / ref_view_count) / sum(math.log(i['count'] / ref_view_count) for i in selected_category_top[c])
+            v['size_value'] = v['color_value'] * math.log(selected_category_count[c] / 10000)
 
     feed_data = [(category_names[str(i)], selected_category_top[i]) for i in category_order]
     
