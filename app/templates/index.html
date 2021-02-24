@@ -158,37 +158,74 @@
                 //.paddingOuter(6)
                 //.padding(20)
                 (root)
-            function perc2color(perc) {
-                var r, g, b = 0;
-                if(perc < 50) {
-                    r = 255;
-                    g = Math.round(10.1 * perc);
-                }
-                else {
-                    g = 255;
-                    r = Math.round(510 - 10.10 * perc);
-                }
-                var h = r * 0x10000 + g * 0x100 + b * 0x1;
-                return '#' + ('000000' + h.toString(16)).slice(-6);
-            }
-            var col_bar=[];
-            for(var kk=0;kk<32;kk++)
-            {
-                col_bar.push(perc2color((3*(kk))));
-            }
+
+            // function perc2color(perc) {
+            //     var r, g, b = 0;
+            //     if(perc < 50) {
+            //         r = 255;
+            //         g = Math.round(10.1 * perc);
+            //     }
+            //     else {
+            //         g = 255;
+            //         r = Math.round(510 - 10.10 * perc);
+            //     }
+            //     var h = r * 0x10000 + g * 0x100 + b * 0x1;
+            //     return '#' + ('000000' + h.toString(16)).slice(-6);
+            // }
+
+            // var col_bar=[];
+            // for(var kk=0;kk<32;kk++)
+            // {
+            //     col_bar.push(perc2color((3*(kk))));
+            // }
+
             // prepare a color scale
-            var color = d3.scaleOrdinal().range(col_bar)
-               // .range([ "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500"])
+            var color = d3.scaleOrdinal()
+            .range([
+                "#CD5C5C",
+                "#006400",
+                "#6A5ACD",
+                "#E03D00",
+                "#483D8B",
+                "#DB7093",
+                "#BDB76B",
+                "#A0522D",
+                "#4B0082",
+                "#FF6347",
+                "#DA70D6",
+                "#696969",
+                "#191970",
+                "#228B22",
+                "#800080",
+                "#008B8B",
+                "#32CD32",
+                "#808080",
+                "#C71585",
+                "#B22222",
+                "#2F4F4F",
+                "#556B2F",
+                "#000000",
+                "#BC8F8F",
+                "#DC143C",
+                "#C6A700",
+                "#663399",
+                "#808000",
+                "#00008B",
+                "#A52A2A",
+                "#5F9EA0",
+                "#D2691E"
+            ]);
         
             // And a opacity scale
             var opacity = d3.scaleLinear()
-                .domain([0.2, 0.5])
-                .range([0.6, 0.9])
+                .domain([0.33, 0.34])
+                .range([0.7, 0.9])
         
             var Tooltip = d3.select("#treemap")
                 .append("div")
                 .style("opacity", 0)
                 .attr("class", "tooltip")
+                .attr('id', 'tooltip')
                 .style('position', 'absolute')
                 .style("background-color", "white")
                 .style("border", "solid")
@@ -244,6 +281,8 @@
                 //     .style("opacity", 0.8)
             }
         
+            document.getElementById('sidebar').addEventListener("mouseover", mouseleave);
+
             // use this information to add rectangles:
             //d 是node
             svg
@@ -256,8 +295,8 @@
                 .attr('width', function (d) { return (d.x1 - d.x0); })
                 .attr('height', function (d) { return (d.y1 - d.y0); })
                 .on("mouseover", mouseover)
-                .on("mousemove", mouseover)
-                .on("mouseleave", mouseleave)
+                //.on("mousemove", mouseover)
+                //.on("mouseleave", mouseleave)
                 .style("stroke", "black")
                 .style("fill", function(d) { return color(d.parent.data.name) })
                 .style("opacity", function(d) { return opacity(d.data.color_value) })
