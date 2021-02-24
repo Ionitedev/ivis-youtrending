@@ -45,11 +45,12 @@ def index_page():
         print(i[0], i[1][0])
 
     if len(feed_data) == 0:
-        return render_template('empty.html', selected=selected)
+        return render_template('empty.html', selected=selected, message='No result')
 
     return render_template('index.html', selected=selected, feed_data=feed_data)
 
 @app.route('/category', methods=['POST'])
 def category_page():
     selected = [request.form['time'], request.form['country'], request.form['lang']]
-    return 'To be completed.<br> Category: ' + request.form['category'] + '<br><a href=\'/\'>Homepage</a>'
+    message = 'To be completed. Category: ' + request.form['category']
+    return render_template('empty.html', selected=selected, message=message)
