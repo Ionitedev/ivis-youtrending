@@ -2,13 +2,26 @@ from flask import Flask
 import pickle
 
 # read
-full_data = {}
-country_index = {}
-lang_index = {}
-time_index = {}
-category_index = {}
-view_rank = ()
-category_view_rank = {}
+with open('app/static/data/full_data.pkl', 'rb') as f:
+    full_data = pickle.load(f)
+
+with open('app/static/data/country_index.pkl', 'rb') as f:
+    country_index = pickle.load(f)
+
+with open('app/static/data/lang_index.pkl', 'rb') as f:
+    lang_index = pickle.load(f)
+    
+with open('app/static/data/time_index.pkl', 'rb') as f:
+    time_index = pickle.load(f)
+
+with open('app/static/data/category_index.pkl', 'rb') as f:
+    category_index = pickle.load(f)
+    
+with open('app/static/data/view_rank.pkl', 'rb') as f:
+    view_rank = pickle.load(f)
+    
+with open('app/static/data/category_view_rank.pkl', 'rb') as f:
+    category_view_rank = pickle.load(f)
 
 category_names = {  # 34 -> 23 when reading a record of video
     '1': 'Film & Animation',

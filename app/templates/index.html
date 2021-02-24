@@ -38,6 +38,23 @@
                 <select name='lang' id='select_lang' style="font-size: large; width: 80%;">
                     <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
                     <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
+                    <option value='ru' {% if selected[2] == 'ru' %} selected {% endif %}>русский</option>
+                    <option value='de' {% if selected[2] == 'de' %} selected {% endif %}>Deutsch</option>
+                    <option value='ja' {% if selected[2] == 'ja' %} selected {% endif %}>日本語</option>
+                    <option value='ko' {% if selected[2] == 'ko' %} selected {% endif %}>한국어</option>
+                    <option value='pt' {% if selected[2] == 'pt' %} selected {% endif %}>Português</option>
+                    <option value='fr' {% if selected[2] == 'fr' %} selected {% endif %}>français</option>
+                    <option value='es' {% if selected[2] == 'es' %} selected {% endif %}>Español</option>
+                    <option value='bg' {% if selected[2] == 'bg' %} selected {% endif %}>български език</option>
+                    <option value='id' {% if selected[2] == 'id' %} selected {% endif %}>Bahasa Indonesia</option>
+                    <option value='tr' {% if selected[2] == 'tr' %} selected {% endif %}>Türkçe</option>
+                    <option value='ca' {% if selected[2] == 'ca' %} selected {% endif %}>català, valencià</option>
+                    <option value='et' {% if selected[2] == 'et' %} selected {% endif %}>eesti</option>
+                    <option value='it' {% if selected[2] == 'it' %} selected {% endif %}>Italiano</option>
+                    <option value='uk' {% if selected[2] == 'uk' %} selected {% endif %}>Українська</option>
+                    <option value='so' {% if selected[2] == 'so' %} selected {% endif %}>Soomaaliga</option>
+                    <option value='ml' {% if selected[2] == 'ml' %} selected {% endif %}>മലയാളം</option>
+                    <option value='zh' {% if selected[2] == 'zh' %} selected {% endif %}>中文</option>
                 </select>
                 <br><br><br>
                 <center style="margin-left: -18%;"><input type='submit' value='Filter' style="font-size: large;"></center>                
@@ -47,7 +64,14 @@
 
         <div id='treemap'></div>
 
-        <script>            
+        <script>
+            function htmlDecode(input){
+                var e = document.createElement('textarea');
+                e.innerHTML = input;
+                // handle case of empty input
+                return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+            }
+
             // set the dimensions and margins of the graph
             var margin = {top: 0, right: 10, bottom: 0, left: 10},
                 width = window.innerWidth * 0.83 - margin.left - margin.right,
@@ -65,89 +89,66 @@
             // size_value: color_value * category_count
             // count: real view count
 
-            var data = {
+            var data = {                
                 "children":[
+                {% for c in feed_data %}
                     {
-                        "name":"food",
-                        "children":[
+                        'name': htmlDecode("{{c[0]}}"),
+                        'children': [
+                        {% for v in c[1] %}
                             {
-                                'title':'title1',
-                                "channel":"mister_a",
-                                "count":28,
-                                'color_value':0.6,
-                                'size_value':1.2,
-                                'pubdate':'1999-08-31',
-                                "trenddate1":"1999-09-01",
-                                "trenddate2":"1999-09-05",
-                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
-                            }, {
-                                'title':'title2',
-                                "channel":"mister_ab",
-                                "count":18,
-                                'color_value':0.4,
-                                'size_value':0.8,
-                                'pubdate':'1999-08-31',
-                                "trenddate1":"1999-09-01",
-                                "trenddate2":"1999-09-05",
-                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
-                            }
-                        ],
-                    }, {
-                        "name":"love",
-                        "children":[
-                            {
-                                'title':'title3',
-                                "channel":"mister_e",
-                                "count":19,
-                                'color_value':0.7,
-                                'size_value':2.1,
-                                'pubdate':'1999-08-31',
-                                "trenddate1":"1999-09-01",
-                                "trenddate2":"1999-09-05",
-                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
-                            }, {
-                                'title':'title4',
-                                "channel":"mister_acb",
-                                "count":8,
-                                'color_value':0.3,
-                                'size_value':0.9,
-                                'pubdate':'1999-08-31',
-                                "trenddate1":"1999-09-01",
-                                "trenddate2":"1999-09-05",
-                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
-                            }
-                        ],
-                    }, {
-                        "name":"fight",
-                        "children":[
-                            {
-                                'title':'title5',
-                                "channel":"mister_j",
-                                "count":9,
-                                'color_value':0.33,
-                                'size_value':1.32,
-                                'pubdate':'1999-08-31',
-                                "trenddate1":"1999-09-01",
-                                "trenddate2":"1999-09-05",
-                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
-                            }, {
-                                'title':'title6',
-                                "channel":"mister_ab",
-                                "count":18,
-                                'color_value':0.67,
-                                'size_value':2.68,
-                                'pubdate':'1999-08-31',
-                                "trenddate1":"1999-09-01",
-                                "trenddate2":"1999-09-05",
-                                'cover_url':'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png'
-                            }
-                        ],
-                    }
+                                'title': htmlDecode("{{v['title']}}"),
+                                'channel': htmlDecode("{{v['channel']}}"),
+                                'count': {{ v['count'] }},
+                                'color_value': {{ v['color_value'] }},
+                                'size_value': {{ v['size_value'] }},
+                                'pubdate': "{{v['pubdate']}}",
+                                'trenddate1': "{{v['trenddate1']}}",
+                                'trenddate2': "{{v['trenddate2']}}",
+                                'cover_url': "{{v['cover_url']}}",
+                            },
+                        {% endfor %}
+                        ]
+                    },
+                {% endfor %}
                 ]
             };
             
             var root = d3.hierarchy(data).sum(function(d){ return d.size_value}) // Here the size of each leave is given in the 'value' field in input data
         
+            function wrap(text, width) {
+                text.each(function () {
+                    var text = d3.select(this),
+                        words = text.text().split(/\s+/).reverse(),
+                        word,
+                        line = [],
+                        lineNumber = 0,
+                        lineHeight = 1.1, // ems
+                        x = text.attr("x"),
+                        y = text.attr("y"),
+                        dy = 0, //parseFloat(text.attr("dy")),
+                        tspan = text.text(null)
+                            .append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", dy + "em");
+                    while (word = words.pop()) {
+                        line.push(word);
+                        tspan.text(line.join(" "));
+                        if (tspan.node().getComputedTextLength() > width) {
+                            line.pop();
+                            tspan.text(line.join(" "));
+                            line = [word];
+                            tspan = text.append("tspan")
+                                .attr("x", x)
+                                .attr("y", y)
+                                .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                                .text(word);
+                        }
+                    }
+                });
+            }
+
             // Give the data to this cluster layout:
             d3.treemap()
                 .size([width, height])
@@ -160,7 +161,7 @@
         
             // prepare a color scale
             var color = d3.scaleOrdinal()
-                .range([ "#DC143C", "#FF0000", "#FF4500"])
+                .range([ "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500", "#DC143C", "#FF0000", "#FF4500"])
         
             // And a opacity scale
             var opacity = d3.scaleLinear()
@@ -182,7 +183,8 @@
                 .style('font-weight', 'bold')
                 .style('width', '180px')
                 .text('')
-            // Three function that change the tooltip when user hover / move / leave a cell
+
+            // functions that change the tooltip when user hover / move / leave a cell
             var mouseover = function(d) {
                 Tooltip
                     .style("opacity", 1)
@@ -199,8 +201,19 @@
                         'Last trending date: ' + d.data.trenddate2 + '<br>' +
                         'View: ' + d.data.count
                     )
-                    .style("left", (parseInt(d3.select(this).attr("x")) + window.innerWidth * 0.15 + 15) + "px")
-                    .style("top", d3.select(this).attr("y")  + "px")        
+                
+                if (parseInt(d3.select(this).attr("x")) > window.innerWidth * 0.7) {
+                    Tooltip.style("left", (parseInt(d3.select(this).attr("x")) + 25) + "px")
+                }
+                else {
+                    Tooltip.style("left", (parseInt(d3.select(this).attr("x")) + window.innerWidth * 0.15 + 25) + "px")
+                }
+                if (parseInt(d3.select(this).attr("y")) > window.innerHeight * 0.7) {
+                    Tooltip.style("top", (parseInt(d3.select(this).attr("y")) - 180 )  + "px")
+                }
+                else {
+                    Tooltip.style("top", (parseInt(d3.select(this).attr("y")) + 15 )  + "px")
+                }
             }
             
             var mouseleave = function(d) {
@@ -225,10 +238,11 @@
                 .attr('width', function (d) { return (d.x1 - d.x0); })
                 .attr('height', function (d) { return (d.y1 - d.y0); })
                 .on("mouseover", mouseover)
+                .on("mousemove", mouseover)
                 .on("mouseleave", mouseleave)
                 .style("stroke", "black")
-                .style("fill", function(d){ return color(d.parent.data.name)} )
-                .style("opacity", function(d){ return opacity(d.data.color_value)})
+                .style("fill", function(d) { return color(d.parent.data.name) })
+                .style("opacity", function(d) { return opacity(d.data.color_value) })
         
             // video title
             svg
@@ -236,12 +250,13 @@
                 .data(root.leaves())
                 .enter()
                 .append("text")
-                .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
-                .attr("y", function(d){ return d.y0+5})    // +20 to adjust position (lower)
+                .attr("x", function(d) { return d.x0+15 })    // +10 to adjust position (more right)
+                .attr("y", function(d) { return d.y0+5 })    // +20 to adjust position (lower)
                 //.text(function(d){ return d.parent.data["name"];})
                 .text(function(d){ return d.data.title })
                 .attr("font-size", "15px")
                 .attr("fill", "white")
+                .call(wrap, 60)
         
             // category name
             svg
@@ -249,9 +264,9 @@
                 .data(root.descendants().filter(function(d){return d.depth==1}))
                 .enter()
                 .append("text")
-                .attr("x", function(d){ return d.x0})
-                .attr("y", function(d){ return d.y0})
-                .text(function(d){ return d.data.name; })
+                .attr("x", function(d) { return d.x0 })
+                .attr("y", function(d) { return d.y0 })
+                .text(function(d) { return d.data.name; })
                 .attr("font-size", "20px")
                 .attr('font-weight', 'bold')
                 .attr("fill",  function(d){ return color(d.data.name)} )

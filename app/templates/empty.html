@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Youtube Trending</title>
+        <script src="https://d3js.org/d3.v4.js"></script>
+        <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
+    </head>
+    <body style="height: 95vh;">
+        <div id='sidebar' style="float: left; width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
+            <img src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%;">   
+
+            <form action='/' method='POST' style="margin-left: 15%;">
+                <p style="color: mintcream;">Trending Time:</p>
+                <select name='time' id='select_time' style="font-size: large; width: 80%;">
+                    <option value='1w' selected>Last week</option>
+                    <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
+                    <option value='3m' {% if selected[0] == '3m' %} selected {% endif %}>Last 3 months</option>
+                    <option value='all' {% if selected[0] == 'all' %} selected {% endif %}>All</option>
+                </select>
+                <br>
+                <p style="color: mintcream;">Country:</p>
+                <select name='country' id='select_country' style="font-size: large; width: 80%;">
+                    <option value='all' {% if selected[1] == 'all' %} selected {% endif %}>All</option>
+                    <option value='br' {% if selected[1] == 'br' %} selected {% endif %}>Brazil</option>
+                    <option value='ca' {% if selected[1] == 'ca' %} selected {% endif %}>Canada</option>
+                    <option value='de' {% if selected[1] == 'de' %} selected {% endif %}>Germany</option>
+                    <option value='fr' {% if selected[1] == 'fr' %} selected {% endif %}>France</option>
+                    <option value='gb' {% if selected[1] == 'gb' %} selected {% endif %}>Great Britain</option>
+                    <option value='in' {% if selected[1] == 'in' %} selected {% endif %}>India</option>
+                    <option value='jp' {% if selected[1] == 'jp' %} selected {% endif %}>Japan</option>
+                    <option value='kr' {% if selected[1] == 'kr' %} selected {% endif %}>South Korea</option>
+                    <option value='mx' {% if selected[1] == 'mx' %} selected {% endif %}>Mexico</option>
+                    <option value='ru' {% if selected[1] == 'ru' %} selected {% endif %}>Russia</option>
+                    <option value='us' {% if selected[1] == 'us' %} selected {% endif %}>United States</option>
+                </select>
+                <br>
+                <p style="color: mintcream;">Language:</p>
+                <select name='lang' id='select_lang' style="font-size: large; width: 80%;">
+                    <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
+                    <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
+                    <option value='ru' {% if selected[2] == 'ru' %} selected {% endif %}>русский</option>
+                    <option value='de' {% if selected[2] == 'de' %} selected {% endif %}>Deutsch</option>
+                    <option value='ja' {% if selected[2] == 'ja' %} selected {% endif %}>日本語</option>
+                    <option value='ko' {% if selected[2] == 'ko' %} selected {% endif %}>한국어</option>
+                    <option value='pt' {% if selected[2] == 'pt' %} selected {% endif %}>Português</option>
+                    <option value='fr' {% if selected[2] == 'fr' %} selected {% endif %}>français</option>
+                    <option value='es' {% if selected[2] == 'es' %} selected {% endif %}>Español</option>
+                    <option value='bg' {% if selected[2] == 'bg' %} selected {% endif %}>български език</option>
+                    <option value='id' {% if selected[2] == 'id' %} selected {% endif %}>Bahasa Indonesia</option>
+                    <option value='tr' {% if selected[2] == 'tr' %} selected {% endif %}>Türkçe</option>
+                    <option value='ca' {% if selected[2] == 'ca' %} selected {% endif %}>català, valencià</option>
+                    <option value='et' {% if selected[2] == 'et' %} selected {% endif %}>eesti</option>
+                    <option value='it' {% if selected[2] == 'it' %} selected {% endif %}>Italiano</option>
+                    <option value='uk' {% if selected[2] == 'uk' %} selected {% endif %}>Українська</option>
+                    <option value='so' {% if selected[2] == 'so' %} selected {% endif %}>Soomaaliga</option>
+                    <option value='ml' {% if selected[2] == 'ml' %} selected {% endif %}>മലയാളം</option>
+                    <option value='zh' {% if selected[2] == 'zh' %} selected {% endif %}>中文</option>
+                </select>
+                <br><br><br>
+                <center style="margin-left: -18%;"><input type='submit' value='Filter' style="font-size: large;"></center>                
+            </form>
+
+        </div>
+
+        <div id='empty'>
+            <p style="font-size:xx-large; margin-left: 40%; vertical-align: middle;">Empty</p>
+        </div>
+    </body>
+
+</html>
