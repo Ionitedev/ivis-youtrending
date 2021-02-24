@@ -116,16 +116,18 @@
             
             var root = d3.hierarchy(data).sum(function(d){ return d.size_value}) // Here the size of each leave is given in the 'value' field in input data
         
-            function wrap(text, width) {
+            function wrap(text) {
                 text.each(function () {
                     var text = d3.select(this),
-                        words = text.text().split(/\s+/).reverse(),
+                        words = text.text().split(/[\s,|\.]+/).reverse(),
                         word,
                         line = [],
                         lineNumber = 0,
                         lineHeight = 1.1, // ems
                         x = text.attr("x"),
                         y = text.attr("y"),
+                        width = parseInt(text.attr('rect_width')) - 25,
+                        bottom = parseInt(text.attr('rect_bottom')),
                         dy = 0, //parseFloat(text.attr("dy")),
                         tspan = text.text(null)
                             .append("tspan")
@@ -135,7 +137,15 @@
                     while (word = words.pop()) {
                         line.push(word);
                         tspan.text(line.join(" "));
-                        if (tspan.node().getComputedTextLength() > width) {
+                        if (parseInt(tspan.attr('y')) > bottom) {
+                            tspan = text.append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                            .text('...');
+                            break;
+                        }
+                        if (tspan.node().getComputedTextLength() > width) {                            
                             line.pop();
                             tspan.text(line.join(" "));
                             line = [word];
@@ -309,11 +319,13 @@
                 .append("text")
                 .attr("x", function(d) { return d.x0+15 })    // +10 to adjust position (more right)
                 .attr("y", function(d) { return d.y0+5 })    // +20 to adjust position (lower)
+                .attr('rect_width',  function(d) { return d.x1 - d.x0 })
+                .attr('rect_bottom',  function(d) { return d.y1 })
                 //.text(function(d){ return d.parent.data["name"];})
-                .text(function(d){ return d.data.title })
+                .text(function(d) { return d.data.title })
                 .attr("font-size", "15px")
                 .attr("fill", "white")
-                .call(wrap, 60)
+                .call(wrap, function(d) { return d.rect_width })
         
             // category name
             svg

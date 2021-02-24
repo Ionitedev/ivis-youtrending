@@ -40,10 +40,6 @@ def index_page():
 
     feed_data = [(category_names[str(i)], selected_category_top[i]) for i in category_order]
     
-    print(selected_category_count)
-    for i in feed_data:
-        print(i[0], i[1][0])
-
     if len(feed_data) == 0:
         return render_template('empty.html', selected=selected, message='No result')
 
