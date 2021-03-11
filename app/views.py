@@ -126,7 +126,7 @@ def category_page():
         feed_data[0] = {(' '.join(t.split()), *tag_rank[t], tag_view[t], tag_frequency[t]) for t in tag_selected}
         feed_data[1] = set()
         feed_data[2] = tag_sorted_view[:10]
-        top_video = list(sorted(reduce(lambda x, y: x.union(tag_index[y]), tag_sorted_view[:100], set()), key=lambda x: full_data[x][8], reverse=True))[:10]
+        top_video = list(sorted(set(reduce(lambda x, y: x.union(tag_index[y]), tag_sorted_view[:100], set())).intersection(video_selected), key=lambda x: full_data[x][8], reverse=True))[:10]
         feed_data[3] = [attr_for_taglist(full_data, i, set(feed_data[2])) for i in top_video]
     else:
         tag_search = {i for i in tag_selected if i.startswith(search)}
@@ -134,7 +134,7 @@ def category_page():
         feed_data[0] = {(' '.join(t.split()), *tag_rank[t], long_num(tag_view[t]), long_num(tag_frequency[t])) for t in tag_not_search}
         feed_data[1] = {(' '.join(t.split()), *tag_rank[t], long_num(tag_view[t]), long_num(tag_frequency[t])) for t in tag_search}
         feed_data[2] = list(sorted(tag_search, key=tag_rank.get))[:10]
-        top_video = list(sorted(reduce(lambda x, y: x.union(tag_index[y]), list(tag_search)[:100], set()), key=lambda x: full_data[x][8], reverse=True))[:10]
+        top_video = list(sorted(set(reduce(lambda x, y: x.union(tag_index[y]), list(tag_search)[:100], set())).intersection(video_selected), key=lambda x: full_data[x][8], reverse=True))[:10]
         feed_data[3] = [attr_for_taglist(full_data, i, set(feed_data[2])) for i in top_video]
 
     return render_template('category.html', selected=selected, category_name=request.form['category'], search=search, feed_data=feed_data)
