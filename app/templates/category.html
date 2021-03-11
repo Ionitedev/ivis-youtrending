@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html style="overflow-x: hidden;">
+<html style="overflow: hidden;">
     <head>
         <title>Youtube Trending</title>
         <script src="https://d3js.org/d3.v4.js"></script>
         <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="static/css/scatter.css">
     </head>
-    <body style="height: 95vh; width: 100%; display: flex;">
-        <div id='sidebar' style="float: left; width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
+    <body style="height: 100vh; width: 100%; display: flex; margin: 0px;">
+        <div id='sidebar' style="width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
             <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%; cursor: pointer;">
 
             <form action='/category' method='POST' style="margin-left: 15%;">
                 <p style="color: mintcream;">Trending Time:</p>
-                <select name='time' id='select_time' style="font-size: large; width: 80%;">
+                <select name='time' id='select_time' style="width: 80%; height: 28px;">
                     <option value='1w' {% if selected[0] == '1w' %} selected {% endif %}>Last week</option>
                     <option value='2w' {% if selected[0] == '2w' %} selected {% endif %}>Last 2 weeks</option>
                     <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
@@ -20,7 +20,7 @@
                 </select>
                 <br>
                 <p style="color: mintcream;">Country:</p>
-                <select name='country' id='select_country' style="font-size: large; width: 80%;">
+                <select name='country' id='select_country' style="width: 80%; height: 28px;">
                     <option value='all' {% if selected[1] == 'all' %} selected {% endif %}>All</option>
                     <option value='br' {% if selected[1] == 'br' %} selected {% endif %}>Brazil</option>
                     <option value='ca' {% if selected[1] == 'ca' %} selected {% endif %}>Canada</option>
@@ -36,7 +36,7 @@
                 </select>
                 <br>
                 <p style="color: mintcream;">Language:</p>
-                <select name='lang' id='select_lang' style="font-size: large; width: 80%;">
+                <select name='lang' id='select_lang' style="width: 80%; height: 28px;">
                     <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
                     <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
                     <option value='ru' {% if selected[2] == 'ru' %} selected {% endif %}>русский</option>
@@ -59,11 +59,11 @@
                 </select>
                 <br><br>
                 <input type="text" name='category', value='{{ category_name }}' style="visibility: hidden;">
-                <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: large;"></center>
+                <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: 16px;"></center>
             </form>
 
         </div>
-        <div id='plot' style="margin-top: 40px; width: 50%;">
+        <div id='plot' style="margin-top: 40px; width: 52%;">
             <p style="text-align: center; font-size: 24px;">Tags in {{ category_name }}</p>
             <center>
                 <span>
@@ -77,7 +77,7 @@
         </div>
         <div style="margin-top: 50px; width: 30%;">
             <center><span>
-                <input id='searchtag' type="text" value='' style="width: 60%;"><button id='searchbutton'>Search Tag</button>
+                <input id='searchtag' type="text" value='' style="width: 40%;"><button id='searchbutton'>Tag Search</button>
             </span></center>
             <center><span>
                 {% if feed_data[1]|length > 0 %}
@@ -89,7 +89,7 @@
                 {% endif %}
             </span></center>
             <div style="height: 22vh">
-                <center><table style="text-align: center; margin-left: 10%;">
+                <center><table style="text-align: center;">
                     <thead><h4>Top tags in the result</h4></thead>
                     <tbody style="font-size: 16px;">
                         {% for t in feed_data[2] %}
@@ -103,9 +103,9 @@
                     </tbody>
                 </table></center>
             </div>
-            <div>
-                <table>
-                    <thead><h4 style="text-align: center;">Top videos in the result</h4></thead>
+            <h4 style="text-align: center;">Top videos in the result</h4>
+            <div style="height: 50vh; overflow-y: scroll;">
+                <table>                    
                     <tbody>
                         {% for v in feed_data[3] %}
                         <tr>
@@ -144,6 +144,8 @@
                 },
                 {% endfor %}
             ];
+
+            if (data.length > 15000) alert('There are too many data points in the result (' + data.length + ').\nThe plot might be unclear and not easy to interact with.\nWe strongly recommended you to add more filters.');
 
             function homepage() {
                 var f = document.createElement('form');
@@ -217,7 +219,7 @@
 
 
             function renderScatterPlot(data) {
-                const width = 0.48 * window.innerWidth;
+                const width = 0.52 * window.innerWidth;
                 const height = 0.7 * window.innerHeight;
 
                 const max_y = parseInt(document.getElementById('max_y').value);

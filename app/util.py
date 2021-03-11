@@ -14,12 +14,15 @@ def long_num(num):
 def attr_for_homepage(full_data, id):
     res = dict()
     res['title'] = full_data[id][2]
+    res['url'] = 'https://www.youtube.com/watch?v=' + id
     res['channel'] = full_data[id][4]
-    res['count'] = long_num(int(full_data[id][8]))
+    res['count'] = int(full_data[id][8])
+    res['count_long_num'] = long_num(int(full_data[id][8]))
     res['pubdate'] = str(full_data[id][3].date())
     res['trenddate1'] = str(full_data[id][7][0].date())
     res['trenddate2'] = str(full_data[id][7][-1].date())
     res['cover_url'] = full_data[id][12]
+    res['days'] = (datetime.date(2021, 3, 9) - full_data[id][7][-1].date()).days
     return res
 
 def attr_for_taglist(full_data, id, tagset):

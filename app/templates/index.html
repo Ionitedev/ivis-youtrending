@@ -5,13 +5,13 @@
         <script src="https://d3js.org/d3.v4.js"></script>
         <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
     </head>
-    <body style="height: 95vh; width: 100%; display: flex;">
-        <div id='sidebar' style="float: left; width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
+    <body style="height: 100vh; width: 100%; display: flex; margin: 0px;">
+        <div id='sidebar' style="width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
             <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%; cursor: pointer;">   
 
             <form action='/' method='POST' style="margin-left: 15%;">
                 <p style="color: mintcream;">Trending Time:</p>
-                <select name='time' id='select_time' style="font-size: large; width: 80%;">
+                <select name='time' id='select_time' style="width: 80%; height: 28px;">
                     <option value='1w' {% if selected[0] == '1w' %} selected {% endif %}>Last week</option>
                     <option value='2w' {% if selected[0] == '2w' %} selected {% endif %}>Last 2 weeks</option>
                     <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
@@ -19,7 +19,7 @@
                 </select>
                 <br>
                 <p style="color: mintcream;">Country:</p>
-                <select name='country' id='select_country' style="font-size: large; width: 80%;">
+                <select name='country' id='select_country' style="width: 80%; height: 28px;">
                     <option value='all' {% if selected[1] == 'all' %} selected {% endif %}>All</option>
                     <option value='br' {% if selected[1] == 'br' %} selected {% endif %}>Brazil</option>
                     <option value='ca' {% if selected[1] == 'ca' %} selected {% endif %}>Canada</option>
@@ -35,7 +35,7 @@
                 </select>
                 <br>
                 <p style="color: mintcream;">Language:</p>
-                <select name='lang' id='select_lang' style="font-size: large; width: 80%;">
+                <select name='lang' id='select_lang' style="width: 80%; height: 28px;">
                     <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
                     <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
                     <option value='ru' {% if selected[2] == 'ru' %} selected {% endif %}>русский</option>
@@ -57,12 +57,12 @@
                     <option value='zh' {% if selected[2] == 'zh' %} selected {% endif %}>中文</option>
                 </select>
                 <br><br><br>
-                <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: large;"></center>                
+                <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: 16px;"></center>                
             </form>
 
         </div>
 
-        <div id='treemap' style="width: 80%;"></div>
+        <div id='treemap' style="width: 85%;"></div>
 
         <script>
             function htmlDecode(input){
@@ -76,8 +76,8 @@
 
             // set the dimensions and margins of the graph
             var margin = {top: 0, right: 10, bottom: 0, left: 10},
-                width = window.innerWidth * 0.83 - margin.left - margin.right,
-                height = window.innerHeight * 0.95 + 20 - margin.top - margin.bottom;
+                width = window.innerWidth * 0.85 - margin.left - margin.right,
+                height = window.innerHeight * 0.97 + 20 - margin.top - margin.bottom;
         
             // append the svg object to the body of the page
             var svg = d3.select("#treemap")
@@ -97,13 +97,14 @@
                             {
                                 'title': htmlDecode("{{v['title']}}"),
                                 'channel': htmlDecode("{{v['channel']}}"),
-                                'count': '{{ v['count'] }}',
+                                'count': "{{ v['count_long_num'] }}",
                                 'color_value': {{ v['color_value'] }},
                                 'size_value': {{ v['size_value'] }},
                                 'pubdate': "{{v['pubdate']}}",
                                 'trenddate1': "{{v['trenddate1']}}",
                                 'trenddate2': "{{v['trenddate2']}}",
                                 'cover_url': "{{v['cover_url']}}",
+                                'url': "{{v['url']}}",
                             },
                         {% endfor %}
                         ]
@@ -139,8 +140,8 @@
         
             // And a opacity scale
             var opacity = d3.scaleLinear()
-                .domain([0.2, 0.38])
-                .range([0.7, 1])
+                .domain([0, 1])
+                .range([0.6, 1])
         
             var Tooltip = d3.select("#treemap")
                 .append("div")
@@ -168,7 +169,7 @@
                     .style('visibility', 'visible')
                     .attr("font-size","5px")
                     .html(
-                        '<img src=' + d.data.cover_url + ' width=\'100%\' >' + '<br>' +
+                        '<a href="' + d.data.url + '" target="_blank"><img src=' + d.data.cover_url + ' width=\'100%\' >' + '</a><br>' +
                         'Title: ' + d.data.title + '<br>' +
                         'Channel: ' + d.data.channel + '<br>' +
                         'Publish date: ' + d.data.pubdate + '<br>' +
@@ -227,7 +228,7 @@
                 .attr("height", function(d) { return d.y1 - d.y0 })
                 .on("mouseover", mouseover)
                 .append("xhtml:body")
-                .html(function(d) { return '<p style="color: white; font-size: 15px">' + d.data.title + '</p>'})
+                .html(function(d) { return '<a style="color: white; font-size: 15px; text-decoration: none" target="_blank" href="' + d.data.url + '">' + d.data.title + '</a>'})
 
             // category name
             svg
@@ -238,8 +239,9 @@
                 .attr("x", function(d) { return d.x0 })
                 .attr("y", function(d) { return d.y0 })
                 .text(function(d) { return d.data.name; })
-                .attr("font-size", "20px")
+                .attr("font-size", "16px")
                 .attr('font-weight', 'bold')
+                .attr('cursor', 'pointer')
                 .attr("fill",  function(d){ return color(d.data.name)} )
                 .on("click", function(d) {
                     var f = document.createElement('form');

@@ -27,17 +27,22 @@ def index_page():
 
     # classify by category
     selected_category = {x[0]: x[1] for x in ((i, selected_index.intersection(category_index[i])) for i in category_index) if len(x[1]) > 0}
-    selected_category_count = {i: sum(full_data[x][11] for x in selected_category[i]) for i in selected_category}
-    category_order = sorted(selected_category_count.keys())
-    selected_category_top = {i: sorted(selected_category[i], key=lambda x: full_data[x][8], reverse=True)[:3] for i in selected_category}
+    selected_category_count = {i: sum(full_data[x][8] for x in selected_category[i]) for i in selected_category}
+    category_order = sorted(selected_category_count.keys(), key=lambda x:selected_category_count[x], reverse=True)
+    selected_category_top = {i: sorted(selected_category[i], key=lambda x: full_data[x][8], reverse=True)[:5] for i in selected_category}
     
     for c in selected_category_top:
         for i, v in enumerate(selected_category_top[c]):
             selected_category_top[c][i] = attr_for_homepage(full_data, v)
+        
         ref_view_count = min(i['count'] for i in selected_category_top[c]) / 5
         for v in selected_category_top[c]:
-            v['color_value'] = math.log(v['count'] / ref_view_count) / sum(math.log(i['count'] / ref_view_count) for i in selected_category_top[c])
-            v['size_value'] = v['color_value'] * math.log(selected_category_count[c] / 10000)
+            v['color_value'] = 1.01 - v['days'] / {'1w': 7, '2w': 14, '1m': 30, 'all': 90}[selected[0]]
+            v['size_value'] = math.log(v['count'] / ref_view_count) / sum(math.log(i['count'] / ref_view_count) for i in selected_category_top[c]) * math.log(selected_category_count[c] / 10000)
+
+        ref_color = max(v['color_value'] for v in selected_category_top[c])
+        for v in selected_category_top[c]:
+            v['color_value'] /= ref_color
 
     feed_data = [(category_names[str(i)], selected_category_top[i]) for i in category_order]
     

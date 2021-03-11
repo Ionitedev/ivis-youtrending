@@ -7,10 +7,6 @@ tags = dict()
 
 for i in full_data:
     for t in full_data[i][6]:
-        if 'None' in t:
-            print(repr(t))
-        if '\n' in t:
-            print('linebreak in {}.{}'.format(i, t))
         t = t.replace('\\', '')
         if t not in tags:
             tags[t] = set()
