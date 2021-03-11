@@ -9,6 +9,7 @@ for i in full_data:
     for t in full_data[i][6]:
         if '\n' in t:
             print('linebreak in {}.{}'.format(i, t))
+        t = t.replace('\\', '')
         if t not in tags:
             tags[t] = set()
         tags[t].add(i)
@@ -30,6 +31,7 @@ for c in category_index:
         category_tag[c] = set()
     for i in category_index[c]:
         for t in full_data[i][6]:
+            t = t.replace('\\', '')
             category_tag[c].add(t)
 
 with open('category_tag.pkl', 'wb') as f:
@@ -49,6 +51,7 @@ for c in lang_index:
         lang_tag[c] = set()
     for i in lang_index[c]:
         for t in full_data[i][6]:
+            t = t.replace('\\', '')
             lang_tag[c].add(t)
 
 with open('lang_tag.pkl', 'wb') as f:
@@ -68,6 +71,7 @@ for c in time_index:
         time_tag[c] = set()
     for i in time_index[c]:
         for t in full_data[i][6]:
+            t = t.replace('\\', '')
             time_tag[c].add(t)
 
 with open('time_tag.pkl', 'wb') as f:
@@ -87,6 +91,7 @@ for c in country_index:
         country_tag[c] = set()
     for i in country_index[c]:
         for t in full_data[i][6]:
+            t = t.replace('\\', '')
             country_tag[c].add(t)
 
 with open('country_tag.pkl', 'wb') as f:

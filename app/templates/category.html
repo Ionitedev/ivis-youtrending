@@ -76,22 +76,25 @@
             </center>
         </div>
         <div style="margin-top: 50px; width: 30%;">
-            <div style="height: 50vh; background-color: blue;">
-                something here1
+            <div style="height: 50vh; background-color:darkcyan;">
+                top tag
                 <br>
-                something here2
+                {% for t in feed_data[2] %}
+                <p>{{ t }}</p>
+                {% endfor %}
             </div>
             <div style="background-color: coral;">
-                something here1
+                top video
                 <br>
-                something here2
-                
+                {% for v in feed_data[3] %}
+                <p>{{ v }}</p>
+                {% endfor %}
             </div>
         </div>
 
         <script>
             var data = [
-                {% for t in  feed_data[0] %}
+                {% for t in feed_data[0] %}
                 {
                     'type': 'A',
                     'tag': '{{ t[0] }}',
@@ -100,7 +103,7 @@
                 },
                 {% endfor %}
 
-                {% for t in  feed_data[1] %}
+                {% for t in feed_data[1] %}
                 {
                     'type': 'B',
                     'tag': '{{ t[0] }}',

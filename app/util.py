@@ -1,9 +1,10 @@
 import datetime
 
+# 0: 'lang', 1: 'country', 2: 'title', 3: 'publishedAt', 4: 'channelTitle',
+# 5: 'categoryId', 6: 'tags', 7: 'tuple_trending_dates', 8: 'view_count',
+# 9: 'likes', 10: 'dislikes', 11: 'comment_count', 12: 'thumbnail_link'
+
 def attr_for_homepage(full_data, id):
-    # 0: 'lang', 1: 'country', 2: 'title', 3: 'publishedAt', 4: 'channelTitle',
-    # 5: 'categoryId', 6: 'tags', 7: 'tuple_trending_dates', 8: 'view_count',
-    # 9: 'likes', 10: 'dislikes', 11: 'comment_count', 12: 'thumbnail_link'
     res = dict()
     res['title'] = full_data[id][2]
     res['channel'] = full_data[id][4]
