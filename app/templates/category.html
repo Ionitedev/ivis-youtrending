@@ -131,11 +131,7 @@
             }
 
             function refresh() {
-                const max_y = document.getElementById('max_y').value;
-                const min_y = document.getElementById('min_y').value;
-                const max_x = document.getElementById('max_x').value;
-                const min_x = document.getElementById('min_x').value;
-                renderScatterPlot(data, max_y, min_y, max_x, min_x);
+                renderScatterPlot(data);
             }
 
             document.getElementById('logo').onclick = homepage;
@@ -149,10 +145,15 @@
             }
 
 
-            function renderScatterPlot(data, max_y=100, min_y=0, max_x=100, min_x=0) {
+            function renderScatterPlot(data) {
                 const width = 0.48 * window.innerWidth;
                 const height = 0.7 * window.innerHeight;
                 
+                const max_y = parseInt(document.getElementById('max_y').value);
+                const min_y = parseInt(document.getElementById('min_y').value);
+                const max_x = parseInt(document.getElementById('max_x').value);
+                const min_x = parseInt(document.getElementById('min_x').value);
+
                 if (document.contains(document.getElementById('scatterPlot')))
                     document.getElementById('plot').removeChild(document.getElementById('scatterPlot'));
                 if (document.contains(document.getElementById('tooltip')))
