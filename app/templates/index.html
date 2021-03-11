@@ -5,9 +5,9 @@
         <script src="https://d3js.org/d3.v4.js"></script>
         <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
     </head>
-    <body style="height: 95vh;">
+    <body style="height: 95vh; width: 100%; display: flex;">
         <div id='sidebar' style="float: left; width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
-            <img src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%;">   
+            <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%; cursor: pointer;">   
 
             <form action='/' method='POST' style="margin-left: 15%;">
                 <p style="color: mintcream;">Trending Time:</p>
@@ -57,12 +57,12 @@
                     <option value='zh' {% if selected[2] == 'zh' %} selected {% endif %}>中文</option>
                 </select>
                 <br><br><br>
-                <center style="margin-left: -18%;"><input type='submit' value='Filter' style="font-size: large;"></center>                
+                <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: large;"></center>                
             </form>
 
         </div>
 
-        <div id='treemap'></div>
+        <div id='treemap' style="width: 80%;"></div>
 
         <script>
             function htmlDecode(input){
@@ -71,6 +71,8 @@
                 // handle case of empty input
                 return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
             }
+
+            document.getElementById('logo').onclick = document.getElementById('filtersubmit').onclick;
 
             // set the dimensions and margins of the graph
             var margin = {top: 0, right: 10, bottom: 0, left: 10},
@@ -170,8 +172,8 @@
                         'Title: ' + d.data.title + '<br>' +
                         'Channel: ' + d.data.channel + '<br>' +
                         'Publish date: ' + d.data.pubdate + '<br>' +
-                        'First trending date: ' + d.data.trenddate1 + '<br>' +
-                        'Last trending date: ' + d.data.trenddate2 + '<br>' +
+                        'First trending: ' + d.data.trenddate1 + '<br>' +
+                        'Last trending: ' + d.data.trenddate2 + '<br>' +
                         'View: ' + d.data.count
                     )
                 

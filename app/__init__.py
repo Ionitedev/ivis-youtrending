@@ -16,12 +16,21 @@ with open('app/static/data/time_index.pkl', 'rb') as f:
 
 with open('app/static/data/category_index.pkl', 'rb') as f:
     category_index = pickle.load(f)
+
+with open('app/static/data/tag_index.pkl', 'rb') as f:
+    tag_index = pickle.load(f)
+
+with open('app/static/data/country_tag.pkl', 'rb') as f:
+    country_tag = pickle.load(f)
+
+with open('app/static/data/lang_tag.pkl', 'rb') as f:
+    lang_tag = pickle.load(f)
     
-with open('app/static/data/view_rank.pkl', 'rb') as f:
-    view_rank = pickle.load(f)
-    
-with open('app/static/data/category_view_rank.pkl', 'rb') as f:
-    category_view_rank = pickle.load(f)
+with open('app/static/data/time_tag.pkl', 'rb') as f:
+    time_tag = pickle.load(f)
+
+with open('app/static/data/category_tag.pkl', 'rb') as f:
+    category_tag = pickle.load(f)
 
 category_names = {  # 34 -> 23 when reading a record of video
     '1': 'Film & Animation',
@@ -45,7 +54,7 @@ category_names = {  # 34 -> 23 when reading a record of video
     '31': 'Anime/Animation',
     '32': 'Action/Adventure',
     '33': 'Classics',
-    '34': 'Comedy',
+    # '34': 'Comedy',
     '35': 'Documentary',
     '36': 'Drama',
     '37': 'Family',
@@ -57,6 +66,8 @@ category_names = {  # 34 -> 23 when reading a record of video
     '43': 'Shows',
     '44': 'Trailers'
 }
+
+category_id = {category_names[i]: int(i) for i in  category_names}
 
 app = Flask(__name__)
 from app import views

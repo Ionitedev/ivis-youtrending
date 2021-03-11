@@ -1,0 +1,75 @@
+/*body {
+    background-color: #BD2D28;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}*/
+#scatterPlot {
+    margin: auto;
+}
+.forColoring {
+    color: black;
+}
+.dot:hover {
+    cursor: pointer;
+}
+.tick line {
+    stroke: black;
+}
+#borderRect {
+    border-right: none;
+}
+.xAxisLabel {
+    font-size: 2em;
+    fill: black;
+}
+.yAxisLabel {
+    font-size: 2em;
+    fill: black;
+    text-anchor: middle;
+}
+.grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.6;
+    shape-rendering: crispEdges
+}
+.grid path {
+    stroke-width: 0;
+}
+#title {
+    font-size: 1.5em;
+    text-anchor: middle;
+    fill: black;
+}
+#tooltip {
+    position: absolute;
+    min-width: 150px;
+    min-height: 20px;
+    max-width: 220px;
+    padding: 10px;
+    font-size: 14px;
+    background: rgb(161, 192, 233);
+    border-radius: 12px;
+    pointer-events: none;
+    box-shadow: 1px 2px 20px 2px #000000;
+}
+#tooltip span {
+    font-weight: bold;
+}
+.textSource {
+    font-style: italic;
+    font-size: 12px;
+    text-anchor: end;
+    fill: #464442;
+}
+.linkSource {
+    fill: #464442;
+    text-decoration: none;
+}
+
+a {
+    text-decoration: underline;
+    font-weight: bold;
+    color: white;
+}
+

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Youtube Trending</title>
+        <script src="https://d3js.org/d3.v4.js"></script>
+        <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="static/css/scatter.css">
+    </head>
+    <body style="height: 95vh; width: 100%; display: flex;">
+        <div id='sidebar' style="float: left; width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
+            <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%; cursor: pointer;">   
+
+            <form action='/category' method='POST' style="margin-left: 15%;">
+                <p style="color: mintcream;">Trending Time:</p>
+                <select name='time' id='select_time' style="font-size: large; width: 80%;">
+                    <option value='1w' selected>Last week</option>
+                    <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
+                    <option value='3m' {% if selected[0] == '3m' %} selected {% endif %}>Last 3 months</option>
+                    <option value='all' {% if selected[0] == 'all' %} selected {% endif %}>All</option>
+                </select>
+                <br>
+                <p style="color: mintcream;">Country:</p>
+                <select name='country' id='select_country' style="font-size: large; width: 80%;">
+                    <option value='all' {% if selected[1] == 'all' %} selected {% endif %}>All</option>
+                    <option value='br' {% if selected[1] == 'br' %} selected {% endif %}>Brazil</option>
+                    <option value='ca' {% if selected[1] == 'ca' %} selected {% endif %}>Canada</option>
+                    <option value='de' {% if selected[1] == 'de' %} selected {% endif %}>Germany</option>
+                    <option value='fr' {% if selected[1] == 'fr' %} selected {% endif %}>France</option>
+                    <option value='gb' {% if selected[1] == 'gb' %} selected {% endif %}>Great Britain</option>
+                    <option value='in' {% if selected[1] == 'in' %} selected {% endif %}>India</option>
+                    <option value='jp' {% if selected[1] == 'jp' %} selected {% endif %}>Japan</option>
+                    <option value='kr' {% if selected[1] == 'kr' %} selected {% endif %}>South Korea</option>
+                    <option value='mx' {% if selected[1] == 'mx' %} selected {% endif %}>Mexico</option>
+                    <option value='ru' {% if selected[1] == 'ru' %} selected {% endif %}>Russia</option>
+                    <option value='us' {% if selected[1] == 'us' %} selected {% endif %}>United States</option>
+                </select>
+                <br>
+                <p style="color: mintcream;">Language:</p>
+                <select name='lang' id='select_lang' style="font-size: large; width: 80%;">
+                    <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
+                    <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
+                    <option value='ru' {% if selected[2] == 'ru' %} selected {% endif %}>русский</option>
+                    <option value='de' {% if selected[2] == 'de' %} selected {% endif %}>Deutsch</option>
+                    <option value='ja' {% if selected[2] == 'ja' %} selected {% endif %}>日本語</option>
+                    <option value='ko' {% if selected[2] == 'ko' %} selected {% endif %}>한국어</option>
+                    <option value='pt' {% if selected[2] == 'pt' %} selected {% endif %}>Português</option>
+                    <option value='fr' {% if selected[2] == 'fr' %} selected {% endif %}>français</option>
+                    <option value='es' {% if selected[2] == 'es' %} selected {% endif %}>Español</option>
+                    <option value='bg' {% if selected[2] == 'bg' %} selected {% endif %}>български език</option>
+                    <option value='id' {% if selected[2] == 'id' %} selected {% endif %}>Bahasa Indonesia</option>
+                    <option value='tr' {% if selected[2] == 'tr' %} selected {% endif %}>Türkçe</option>
+                    <option value='ca' {% if selected[2] == 'ca' %} selected {% endif %}>català, valencià</option>
+                    <option value='et' {% if selected[2] == 'et' %} selected {% endif %}>eesti</option>
+                    <option value='it' {% if selected[2] == 'it' %} selected {% endif %}>Italiano</option>
+                    <option value='uk' {% if selected[2] == 'uk' %} selected {% endif %}>Українська</option>
+                    <option value='so' {% if selected[2] == 'so' %} selected {% endif %}>Soomaaliga</option>
+                    <option value='ml' {% if selected[2] == 'ml' %} selected {% endif %}>മലയാളം</option>
+                    <option value='zh' {% if selected[2] == 'zh' %} selected {% endif %}>中文</option>
+                </select>
+                <br><br>
+                <input type="text" name='category', value='{{ category_name }}' style="visibility: hidden;">
+                <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: large;"></center>                
+            </form>
+
+        </div>
+        <div id='plot' style="margin-top: 50px; width: 50%;">
+            <p style="text-align: center; font-size: 24px;">Tags in {{ category_name }}</p>
+            <center>
+                <span>
+                    x range: <input id='min_x' type="text" value='0' style="width: 30px; text-align: center;">
+                    to <input id='max_x' type="text" value='100' style="width: 30px; text-align: center;">
+                    , y range: <input id='min_y' type="text" value='0' style="width: 30px; text-align: center;">
+                    to <input id='max_y' type="text" value='100' style="width: 30px; text-align: center;">
+                    <button id='rangebutton'>Plot</button>                    
+                </span>
+            </center>
+        </div>
+        <div style="margin-top: 50px; width: 30%;">
+            <div style="height: 50vh; background-color: blue;">
+                something here1
+                <br>
+                something here2
+            </div>
+            <div style="background-color: coral;">
+                something here1
+                <br>
+                something here2
+                
+            </div>
+        </div>
+
+        <script>
+            var data = [
+                {% for t in  feed_data[0] %}
+                {
+                    'type': 'A',
+                    'tag': '{{ t[0] }}',
+                    'view_count': {{ t[1] }},
+                    'frequency': {{ t[2] }}
+                },
+                {% endfor %}
+
+                {% for t in  feed_data[1] %}
+                {
+                    'type': 'B',
+                    'tag': '{{ t[0] }}',
+                    'view_count': {{ t[1] }},
+                    'frequency': {{ t[2] }}
+                },
+                {% endfor %}
+            ];
+
+            function homepage() {
+                var f = document.createElement('form');
+                    f.setAttribute('style', 'visibility: hidden;');
+                    f.setAttribute('method', 'post');
+                    f.setAttribute('action', '/');
+
+                var filter = ['time', 'country', 'lang'];
+                for (var i = 0; i < 3; i++) {
+                    var s = document.createElement("input");
+                    s.setAttribute('style', 'visibility: hidden');
+                    s.setAttribute('type', "text");
+                    s.setAttribute('name', filter[i]);
+                    s.setAttribute('value', document.getElementById('select_' + filter[i]).value);
+                    f.appendChild(s);
+                }
+
+                document.body.appendChild(f);
+                f.submit();
+            }
+
+            function refresh() {
+                const max_y = document.getElementById('max_y').value;
+                const min_y = document.getElementById('min_y').value;
+                const max_x = document.getElementById('max_x').value;
+                const min_x = document.getElementById('min_x').value;
+                renderScatterPlot(data, max_y, min_y, max_x, min_x);
+            }
+
+            document.getElementById('logo').onclick = homepage;
+            document.getElementById('rangebutton').onclick = refresh;
+
+            function htmlDecode(input){
+                var e = document.createElement('textarea');
+                e.innerHTML = input;
+                // handle case of empty input
+                return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+            }
+
+
+            function renderScatterPlot(data, max_y=100, min_y=0, max_x=100, min_x=0) {
+                const width = 0.48 * window.innerWidth;
+                const height = 0.7 * window.innerHeight;
+                
+                if (document.contains(document.getElementById('scatterPlot')))
+                    document.getElementById('plot').removeChild(document.getElementById('scatterPlot'));
+                if (document.contains(document.getElementById('tooltip')))
+                    document.body.removeChild(document.getElementById('tooltip'));
+
+                const scatterPlot = d3
+                .select("#plot")
+                .append("svg")
+                .attr("height", height)
+                .attr("width", width)
+                .attr("id", "scatterPlot")
+                .style("background-color", "white")
+
+                //.style("box-shadow", "2px 1px 20px 6px #000000");
+                margin = { top: 40, right: 50, bottom: 80, left: 120 };
+                const innerWidth = width - margin.right - margin.left;
+                const innerHeight = height - margin.top - margin.bottom;
+
+                var Max_Count = d3.max(data, (d) => d['view_count']);
+                var Min_Count = d3.min(data, (d) => d['view_count']);
+                var Max_Frequency = d3.max(data, (d) => d['frequency']);
+                var Min_Frequency = d3.min(data, (d) => d['frequency']);
+
+                var formatPercent = d3.format(".0%");
+
+                const xScale = d3
+                    .scaleLinear()
+                    .range([0, innerWidth])
+                    .domain([max_x, min_x]);
+
+                const yScale = d3
+                    .scaleLinear()
+                    .range([innerHeight, 0])
+                    .domain([max_y, min_y]);
+
+                const gScatterPlot = scatterPlot
+                    .append("g")
+                    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+                //grid line
+                function x_grid() {
+                    return d3.axisBottom(xScale)
+                        .ticks(10)
+                }
+
+
+                function y_grid() {
+                    return d3.axisLeft(yScale)
+                        .ticks(10)
+                }
+
+                gScatterPlot.append("g")
+                    .attr("class", "grid")
+                    .attr("transform", `translate(0, ${innerHeight})`)
+                    .call(x_grid()
+                        .tickSize(-innerHeight)
+                        .tickFormat("")
+                    )
+
+                gScatterPlot.append("g")
+                    .attr("class", "grid")
+                    .attr("transform", `translate(0,0)`)
+                    .call(y_grid()
+                        .tickSize(-innerWidth)
+                        .tickFormat("")
+                    )
+
+                //x-y axis
+                const xAxisG = gScatterPlot
+                    .append("g")
+                    .call(d3.axisBottom(xScale))
+                    .attr("class", "forColoring")
+                    .attr("id", "x-axis")
+                    .attr("transform", `translate(0, ${innerHeight})`);
+
+                const yAxisG = gScatterPlot
+                    .append("g")
+                    .attr("class", "forColoring")
+                    .attr("id", "y-axis")
+                    .call(d3.axisLeft(yScale));
+
+
+                xAxisG
+                    .append("text")
+                    .attr("class", "xAxisLabel")
+                    .text("Rank in Audience Popularity (%)")
+                    .attr("x", innerWidth / 2)
+                    .attr("y", 45);
+                yAxisG
+                    .append("text")
+                    .attr("class", "yAxisLabel")
+                    .text("Rank in Youtubers Popularity (%)")
+                    .attr("x", -innerHeight / 2)
+                    .attr("y", -45)
+                    .style("transform", "rotate(-90deg)");
+                
+                //Tool tip
+                var tooltip = d3
+                    .select("body")
+                    .append("div")
+                    .attr("id", "tooltip")
+                    .style("opacity", 0);
+
+                var color = ["#ff3333", "#E3BA22"];
+                var radSize = 3;
+
+                gScatterPlot
+                    .selectAll("dot")
+                    .data(data)
+                    .enter()
+                    .filter(function(d) { return d.frequency >= min_y && d.frequency <= max_y && d.view_count >= min_x && d.view_count <= max_x; })
+                    .append("circle")
+                    .attr("class", "dot")
+                    .attr("cx", function (d) {
+                        return xScale(d.view_count);
+                    })
+                    .attr("cy", (d) => yScale(d.frequency))
+                    .attr("r", radSize)
+                    .attr("fill", (d) => (d.type == "A" ? color[1] : color[0]))
+                    .style("stroke", "white")
+                    .on("mouseover", function (d) {
+                        tooltip.transition().duration(100).style("opacity", 0.95);
+                        tooltip
+                            .html(
+                                "<span>tag: </span>" +
+                                d.tag +
+                                "<br>" +
+                                "<span>frequency: </span>" +
+                                d.frequency +
+                                "<br>" +
+                                "<span>view count: </span>" +
+                                d.view_count +
+                                "<br>"
+                            )
+                            .style("left", event.pageX + 25 + "px")
+                            .style("top", event.pageY + "px")
+                    })
+                    .on("mouseout", function (d) {
+                        tooltip
+                            .transition()
+                            .duration(100)
+                            .style("opacity", 0);
+                    });
+
+            }
+
+            renderScatterPlot(data);
+
+        </script>
+    </body>
+
+</html>
