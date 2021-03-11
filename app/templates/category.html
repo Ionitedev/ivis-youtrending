@@ -84,7 +84,11 @@
                 {{ feed_data[1]|length }}/{{ feed_data[0]|length }}
                 results
                 {% else %}
-                {{ feed_data[0]|length }}
+                    {% if search|length > 0 %}
+                    0/{{ feed_data[0]|length }}
+                    {% else %}
+                    {{ feed_data[0]|length }}
+                    {% endif %}                
                 results
                 {% endif %}
             </span></center>
@@ -163,7 +167,7 @@
                     f.appendChild(s);
                 }
 
-                document.body.appendChild(f);
+                document.getElementById('sidebar').appendChild(f);
                 f.submit();
             }
 
@@ -197,7 +201,7 @@
                     s.setAttribute('value', document.getElementById('searchtag').value);
                     f.appendChild(s);
 
-                    document.body.appendChild(f);
+                    document.getElementById('sidebar').appendChild(f);
                     f.submit();
             }
 
