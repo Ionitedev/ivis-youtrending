@@ -12,9 +12,9 @@
             <form action='/' method='POST' style="margin-left: 15%;">
                 <p style="color: mintcream;">Trending Time:</p>
                 <select name='time' id='select_time' style="font-size: large; width: 80%;">
-                    <option value='1w' selected>Last week</option>
+                    <option value='1w' {% if selected[0] == '1w' %} selected {% endif %}>Last week</option>
+                    <option value='2w' {% if selected[0] == '2w' %} selected {% endif %}>Last 2 weeks</option>
                     <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
-                    <option value='3m' {% if selected[0] == '3m' %} selected {% endif %}>Last 3 months</option>
                     <option value='all' {% if selected[0] == 'all' %} selected {% endif %}>All</option>
                 </select>
                 <br>

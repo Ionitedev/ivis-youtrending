@@ -17,20 +17,20 @@ with open('app/static/data/time_index.pkl', 'rb') as f:
 with open('app/static/data/category_index.pkl', 'rb') as f:
     category_index = pickle.load(f)
 
-# with open('app/static/data/tag_index.pkl', 'rb') as f:
-#     tag_index = pickle.load(f)
+with open('app/static/data/tag_index.pkl', 'rb') as f:
+    tag_index = pickle.load(f)
 
-# with open('app/static/data/country_tag.pkl', 'rb') as f:
-#     country_tag = pickle.load(f)
+with open('app/static/data/country_tag.pkl', 'rb') as f:
+    country_tag = pickle.load(f)
 
-# with open('app/static/data/lang_tag.pkl', 'rb') as f:
-#     lang_tag = pickle.load(f)
+with open('app/static/data/lang_tag.pkl', 'rb') as f:
+    lang_tag = pickle.load(f)
     
-# with open('app/static/data/time_tag.pkl', 'rb') as f:
-#     time_tag = pickle.load(f)
+with open('app/static/data/time_tag.pkl', 'rb') as f:
+    time_tag = pickle.load(f)
 
-# with open('app/static/data/category_tag.pkl', 'rb') as f:
-#     category_tag = pickle.load(f)
+with open('app/static/data/category_tag.pkl', 'rb') as f:
+    category_tag = pickle.load(f)
 
 category_names = {  # 34 -> 23 when reading a record of video
     '1': 'Film & Animation',
