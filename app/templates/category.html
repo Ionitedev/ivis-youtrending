@@ -75,16 +75,19 @@
                 </span>
             </center>
         </div>
-        <div style="margin-top: 50px; width: 30%;">
-            <div style="height: 50vh; background-color:darkcyan;">
-                top tag
+        <div style="margin-top: 80px; width: 30%;">
+            <center><span>
+                <input id='searchtag' type="text" value='' style="width: 60%;"><button id='searchbutton'>Search Tag</button>
+            </span></center>
+            <div style="margin-top: 20px; height: 40vh; background-color:darkcyan;">
+                top tags
                 <br>
                 {% for t in feed_data[2] %}
                 <p>{{ t }}</p>
                 {% endfor %}
             </div>
             <div style="background-color: coral;">
-                top video
+                top videos
                 <br>
                 {% for v in feed_data[3] %}
                 <p>{{ v }}</p>
@@ -133,12 +136,48 @@
                 f.submit();
             }
 
+            function search() {
+                var f = document.createElement('form');
+                    f.setAttribute('style', 'visibility: hidden;');
+                    f.setAttribute('method', 'post');
+                    f.setAttribute('action', '/category');
+
+                    var filter = ['time', 'country', 'lang'];
+                    for (var i = 0; i < 3; i++) {
+                        var s = document.createElement("input");
+                        s.setAttribute('style', 'visibility: hidden');
+                        s.setAttribute('type', "text");
+                        s.setAttribute('name', filter[i]);
+                        s.setAttribute('value', document.getElementById('select_' + filter[i]).value);
+                        f.appendChild(s);
+                    }
+
+                    var s = document.createElement("input");
+                    s.setAttribute('style', 'visibility: hidden');
+                    s.setAttribute('type', "text");
+                    s.setAttribute('name', 'category');
+                    s.setAttribute('value', htmlDecode('{{ category_name }}'));
+                    f.appendChild(s);
+
+                    s = document.createElement("input");
+                    s.setAttribute('style', 'visibility: hidden');
+                    s.setAttribute('type', "text");
+                    s.setAttribute('name', 'search');
+                    s.setAttribute('value', document.getElementById('searchtag').value);
+                    f.appendChild(s);
+
+                    document.body.appendChild(f);
+                    f.submit();
+            }
+
             function refresh() {
                 renderScatterPlot(data);
             }
 
             document.getElementById('logo').onclick = homepage;
             document.getElementById('rangebutton').onclick = refresh;
+            document.getElementById('searchbutton').onclick = search;
+            document.getElementById('searchtag').value = htmlDecode('{{ search }}');
 
             function htmlDecode(input){
                 var e = document.createElement('textarea');

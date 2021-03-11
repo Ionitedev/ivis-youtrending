@@ -53,6 +53,7 @@ def category_page():
 
     video_selected = category_index[id]
     tag_selected = category_tag[id]
+    tag_selected.discard('[None]')
 
     # filter by time
     if selected[0] != 'all':
@@ -79,9 +80,9 @@ def category_page():
     
     # delete before submission
     ###
-    if tag_num > 50000:
-        tag_sorted_view = tag_sorted_view[:50000]
-        tag_sorted_frequency = tag_sorted_frequency[:50000]
+    if tag_num > 40000:
+        tag_sorted_view = tag_sorted_view[:40000]
+        tag_sorted_frequency = tag_sorted_frequency[:40000]
 
         tag_selected = set(tag_sorted_view).intersection(set(tag_sorted_frequency))
 
@@ -90,12 +91,12 @@ def category_page():
     
         for i, t in enumerate(tag_sorted_view):
             if t in tag_rank:
-                rank = math.ceil((i + 1) / 50000 * 10000) / 100
+                rank = math.ceil((i + 1) / 40000 * 10000) / 100
                 tag_rank[t][0] = rank
         
         for i, t in enumerate(tag_sorted_frequency):
             if t in tag_rank:
-                rank = math.ceil((i + 1) / 50000 * 10000) / 100
+                rank = math.ceil((i + 1) / 40000 * 10000) / 100
                 tag_rank[t][1] = rank
     ####
     else:
@@ -114,17 +115,22 @@ def category_page():
     feed_data = [0] * 4
     # feed_data: [tag, tag search, tag search top, video search top]
 
-    search = ''#request.form['search']
+    search = request.form.get('search', '')
+    print(search)
     if len(search) == 0:
         feed_data[0] = {(' '.join(t.split()), *tag_rank[t]) for t in tag_selected}
         feed_data[1] = set()
         feed_data[2] = tag_sorted_view[:10]
         feed_data[3] = list(sorted(reduce(lambda x, y: x.union(tag_index[y]), tag_sorted_view[:100], set()), key=lambda x: full_data[x][8], reverse=True))[:10]
     else:
-        feed_data[0] = {(' '.join(t.split()), *tag_rank[t]) for t in tag_selected}
-        feed_data[1] = set()
-        feed_data[2] = tag_sorted_view[:10]
-        feed_data[3] = list(sorted(reduce(lambda x, y: x.union(tag_index[y]), tag_sorted_view[:100], set()), key=lambda x: full_data[x][8], reverse=True))[:10]
+        tag_search = {i for i in tag_selected if i.startswith(search)}
+        tag_not_search = tag_selected.difference(tag_search)
+        feed_data[0] = {(' '.join(t.split()), *tag_rank[t]) for t in tag_not_search}
+        feed_data[1] = {(' '.join(t.split()), *tag_rank[t]) for t in tag_search}
+
+        feed_data[2] = list(sorted(tag_search, key=tag_rank.get))[:10]
+        feed_data[3] = list(sorted(reduce(lambda x, y: x.union(tag_index[y]), list(tag_search)[:100], set()), key=lambda x: full_data[x][8], reverse=True))[:10]
+    
     print(len(feed_data[0]), len(feed_data[1]))
 
-    return render_template('category.html', selected=selected, category_name=request.form['category'], feed_data=feed_data)
+    return render_template('category.html', selected=selected, category_name=request.form['category'], search=search, feed_data=feed_data)
