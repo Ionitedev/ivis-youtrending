@@ -11,6 +11,17 @@ def long_num(num):
         num /= 1000.0
     return '%.2f%s' % (num, ['', 'K', 'M', 'G'][magnitude]) if magnitude > 0 else str(num)
 
+def rank_map(counters, reverse=False):
+    values = sorted(set(counters.values()), reverse=reverse)
+    value_counter = {v: 0 for v in values}
+    for i in counters:
+        value_counter[counters[i]] += 1
+
+    for i in range(1, len(values)):
+        value_counter[values[i]] += value_counter[values[i - 1]]
+
+    return value_counter
+
 def attr_for_homepage(full_data, id):
     res = dict()
     res['title'] = full_data[id][2]

@@ -254,12 +254,12 @@
                 const xScale = d3
                     .scaleLinear()
                     .range([0, innerWidth])
-                    .domain([max_x, min_x]);
+                    .domain([max_x + 2, min_x - 2]);
 
                 const yScale = d3
                     .scaleLinear()
                     .range([innerHeight, 0])
-                    .domain([max_y, min_y]);
+                    .domain([max_y + 2, min_y - 2]);
 
                 const gScatterPlot = scatterPlot
                     .append("g")
@@ -388,12 +388,12 @@
                                 "<span>Tag: " +
                                 d.tag +
                                 "</span><br>" +
-                                "<span>frequency: " +
+                                "<span>Frequency: " +
                                 d.freq_count +
                                 " (top " +
                                 d.freq_rank +
                                 "%)</span><br>" +
-                                "<span>view count: " +
+                                "<span>View: " +
                                 d.view_count +
                                 " (top " +
                                 d.view_rank +

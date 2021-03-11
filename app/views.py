@@ -75,12 +75,16 @@ def category_page():
         video_selected = video_selected.intersection(lang_index[selected[2]])
         tag_selected = tag_selected.intersection(lang_tag[selected[2]])
 
+    tag_selected = {t for t in tag_selected if len(video_selected.intersection(tag_index[t])) > 0}
+    
     # sort tags
-    tag_view = {x: sum(full_data[i][8] for i in tag_index[x]) for x in tag_selected}
-    tag_frequency = {x: len(tag_index[x]) for x in tag_selected}
+    tag_view = {x: sum(full_data[i][8] for i in tag_index[x].intersection(video_selected)) for x in tag_selected}
+    tag_frequency = {x: len(tag_index[x].intersection(video_selected)) for x in tag_selected}
     tag_sorted_view = sorted(tag_selected, key=lambda x: tag_view[x], reverse=True)
     tag_sorted_frequency = sorted(tag_selected, key=lambda x: tag_frequency[x], reverse=True)
-    
+    rank_map_view = rank_map(tag_view, reverse=True)
+    rank_map_frequency = rank_map(tag_frequency, reverse=True)
+    print(rank_map_frequency)
     tag_num = len(tag_selected)
     
     # delete before submission
@@ -88,35 +92,15 @@ def category_page():
     if tag_num > 40000:
         tag_sorted_view = tag_sorted_view[:40000]
         tag_sorted_frequency = tag_sorted_frequency[:40000]
-
         tag_selected = set(tag_sorted_view).intersection(set(tag_sorted_frequency))
-
-        tag_num = len(tag_selected)
-        tag_rank = {t: [0, 0] for t in tag_selected}
-    
-        for i, t in enumerate(tag_sorted_view):
-            if t in tag_rank:
-                rank = math.ceil((i + 1) / 40000 * 10000) / 100
-                tag_rank[t][0] = rank
-        
-        for i, t in enumerate(tag_sorted_frequency):
-            if t in tag_rank:
-                rank = math.ceil((i + 1) / 40000 * 10000) / 100
-                tag_rank[t][1] = rank
+        tag_num = len(tag_selected)            
     ####
-    else:
-        tag_rank = {t: [0, 0] for t in tag_selected}
-        
-        for i, t in enumerate(tag_sorted_view):
-            if t in tag_rank:
-                rank = math.ceil((i + 1) / tag_num * 10000) / 100
-                tag_rank[t][0] = rank
-        
-        for i, t in enumerate(tag_sorted_frequency):
-            if t in tag_rank:
-                rank = math.ceil((i + 1) / tag_num * 10000) / 100
-                tag_rank[t][1] = rank
-
+    
+    tag_rank = {t: [0, 0] for t in tag_selected}
+    
+    for t in tag_selected:
+        tag_rank[t] = [math.ceil((rank_map_view[tag_view[t]]) / tag_num * 10000) / 100, math.ceil((rank_map_frequency[tag_frequency[t]]) / tag_num * 10000) / 100 ]
+    
     feed_data = [0] * 4
     # feed_data: [tag, tag search, tag search top, video search top]
 
