@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="overflow-x: hidden;">
     <head>
         <title>Youtube Trending</title>
         <script src="https://d3js.org/d3.v4.js"></script>
@@ -63,7 +63,7 @@
             </form>
 
         </div>
-        <div id='plot' style="margin-top: 50px; width: 50%;">
+        <div id='plot' style="margin-top: 40px; width: 50%;">
             <p style="text-align: center; font-size: 24px;">Tags in {{ category_name }}</p>
             <center>
                 <span>
@@ -75,23 +75,48 @@
                 </span>
             </center>
         </div>
-        <div style="margin-top: 80px; width: 30%;">
+        <div style="margin-top: 50px; width: 30%;">
             <center><span>
                 <input id='searchtag' type="text" value='' style="width: 60%;"><button id='searchbutton'>Search Tag</button>
             </span></center>
-            <div style="margin-top: 20px; height: 40vh; background-color:darkcyan;">
-                top tags
-                <br>
-                {% for t in feed_data[2] %}
-                <p>{{ t }}</p>
-                {% endfor %}
+            <center><span>
+                {% if feed_data[1]|length > 0 %}
+                {{ feed_data[1]|length }}/{{ feed_data[0]|length }}
+                results
+                {% else %}
+                {{ feed_data[0]|length }}
+                results
+                {% endif %}
+            </span></center>
+            <div style="height: 22vh">
+                <center><table style="text-align: center; margin-left: 10%;">
+                    <thead><h4>Top tags in the result</h4></thead>
+                    <tbody style="font-size: 16px;">
+                        {% for t in feed_data[2] %}
+                            {% if loop.index0 < 5 %}
+                                <tr>
+                                    <td>{{ t }}</td>
+                                    <td>{{ feed_data[2][loop.index0 + 5] }}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table></center>
             </div>
-            <div style="background-color: coral;">
-                top videos
-                <br>
-                {% for v in feed_data[3] %}
-                <p>{{ v }}</p>
-                {% endfor %}
+            <div>
+                <table>
+                    <thead><h4 style="text-align: center;">Top videos in the result</h4></thead>
+                    <tbody>
+                        {% for v in feed_data[3] %}
+                        <tr>
+                            <!-- <td><img src="{{ v['cover_url'] }}"></td> -->
+                            <td><a href="{{ v['url'] }}" target="_blank" style="color: firebrick; font-size: 13px;">{{ v['title'] }}</a></td>
+                            <td style="text-align: center; font-size: 12px;">{{ v['tags'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
             </div>
         </div>
 
@@ -101,8 +126,10 @@
                 {
                     'type': 'A',
                     'tag': '{{ t[0] }}',
-                    'view_count': {{ t[1] }},
-                    'frequency': {{ t[2] }}
+                    'view_rank': {{ t[1] }},
+                    'freq_rank': {{ t[2] }},
+                    'view_count': '{{ t[3] }}',
+                    'freq_count': '{{ t[4] }}'
                 },
                 {% endfor %}
 
@@ -110,8 +137,10 @@
                 {
                     'type': 'B',
                     'tag': '{{ t[0] }}',
-                    'view_count': {{ t[1] }},
-                    'frequency': {{ t[2] }}
+                    'view_rank': {{ t[1] }},
+                    'freq_rank': {{ t[2] }},
+                    'view_count': '{{ t[3] }}',
+                    'freq_count': '{{ t[4] }}'
                 },
                 {% endfor %}
             ];
@@ -214,11 +243,6 @@
                 const innerWidth = width - margin.right - margin.left;
                 const innerHeight = height - margin.top - margin.bottom;
 
-                var Max_Count = d3.max(data, (d) => d['view_count']);
-                var Min_Count = d3.min(data, (d) => d['view_count']);
-                var Max_Frequency = d3.max(data, (d) => d['frequency']);
-                var Min_Frequency = d3.min(data, (d) => d['frequency']);
-
                 var formatPercent = d3.format(".0%");
 
                 const xScale = d3
@@ -246,7 +270,6 @@
                     return d3.axisBottom(xScale)
                         .ticks(10)
                 }
-
 
                 function y_grid() {
                     return d3.axisLeft(yScale)
@@ -306,16 +329,15 @@
                     .style("opacity", 0);
 
                  var zoom = d3.zoom()
-                     .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
-                     .extent([[0, 0], [width, height]])
+                     .scaleExtent([1, 10])  // This control how much you can unzoom (x0.5) and zoom (x20)
+                     .extent([[0, 0], [innerWidth, innerHeight]])
                      .on("zoom", zoomed);
 
                 gScatterPlot.append("rect")
-                    .attr("width", width)
-                    .attr("height", height)
+                    .attr("width", innerWidth)
+                    .attr("height", innerHeight)
                     .style("fill", "none")
                     .style("pointer-events", "all")
-                    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
                     .call(zoom);
 
                 function zoomed() {
@@ -330,11 +352,9 @@
 
                     gScatterPlot
                         .selectAll("circle")
-                        .attr('cx', function(d) {return newX(d.view_count);})
-                        .attr('cy', function(d) {return newY(d.frequency);});
+                        .attr('cx', function(d) {return newX(d.view_rank);})
+                        .attr('cy', function(d) {return newY(d.freq_rank);});
                 }
-
-
 
                 var color = ["#ff3333", "#E3BA22"];
                 var radSize = 3;
@@ -343,13 +363,13 @@
                     .selectAll("dot")
                     .data(data)
                     .enter()
-                    .filter(function(d) { return d.frequency >= min_y && d.frequency <= max_y && d.view_count >= min_x && d.view_count <= max_x; })
+                    .filter(function(d) { return d.freq_rank >= min_y && d.freq_rank <= max_y && d.view_rank >= min_x && d.view_rank <= max_x; })
                     .append("circle")
                     .attr("class", "dot")
                     .attr("cx", function (d) {
-                        return xScale(d.view_count);
+                        return xScale(d.view_rank);
                     })
-                    .attr("cy", (d) => yScale(d.frequency))
+                    .attr("cy", (d) => yScale(d.freq_rank))
                     .attr("r", radSize)
                     .attr("fill", (d) => (d.type == "A" ? color[1] : color[0]))
                     .attr("clip-path", "url(#clip)")
@@ -359,15 +379,19 @@
                         tooltip.transition().duration(100).style("opacity", 0.95);
                         tooltip
                             .html(
-                                "<span>tag: </span>" +
+                                "<span>Tag: " +
                                 d.tag +
-                                "<br>" +
-                                "<span>frequency: </span>" +
-                                d.frequency +
-                                "<br>" +
-                                "<span>view count: </span>" +
+                                "</span><br>" +
+                                "<span>frequency: " +
+                                d.freq_count +
+                                " (top " +
+                                d.freq_rank +
+                                "%)</span><br>" +
+                                "<span>view count: " +
                                 d.view_count +
-                                "<br>"
+                                " (top " +
+                                d.view_rank +
+                                "%)</span><br>"
                             )
                             .style("left", event.pageX + 25 + "px")
                             .style("top", event.pageY + "px")
@@ -378,7 +402,6 @@
                             .duration(100)
                             .style("opacity", 0);
                     });
-
             }
 
             renderScatterPlot(data);

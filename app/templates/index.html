@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="overflow: hidden;">
     <head>
         <title>Youtube Trending</title>
         <script src="https://d3js.org/d3.v4.js"></script>
@@ -97,7 +97,7 @@
                             {
                                 'title': htmlDecode("{{v['title']}}"),
                                 'channel': htmlDecode("{{v['channel']}}"),
-                                'count': {{ v['count'] }},
+                                'count': '{{ v['count'] }}',
                                 'color_value': {{ v['color_value'] }},
                                 'size_value': {{ v['size_value'] }},
                                 'pubdate': "{{v['pubdate']}}",
