@@ -81,7 +81,7 @@
             </span></center>
             <center><span>
                 {% if feed_data[1]|length > 0 %}
-                {{ feed_data[1]|length }}/{{ feed_data[0]|length }}
+                {{ feed_data[1]|length }}/{{ feed_data[0]|length + feed_data[1]|length }}
                 results
                 {% else %}
                     {% if search|length > 0 %}
@@ -409,7 +409,7 @@
                             .style("opacity", 0);
                     })
                     .on('click', function(d) {
-                        document.getElementById('searchtag').value = d.tag;
+                        document.getElementById('searchtag').value = htmlDecode(d.tag);
                         document.getElementById('searchbutton').click();
                     });
             }
