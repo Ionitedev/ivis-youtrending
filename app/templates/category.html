@@ -407,6 +407,10 @@
                             .transition()
                             .duration(100)
                             .style("opacity", 0);
+                    })
+                    .on('click', function(d) {
+                        document.getElementById('searchtag').value = d.tag;
+                        document.getElementById('searchbutton').click();
                     });
             }
 
