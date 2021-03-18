@@ -129,4 +129,4 @@ def category_page():
 
 @app.route('/info', methods=['GET'])
 def info_page():
-    return 'nothing'
+    return redirect('https://sites.google.com/view/youtrend-info')

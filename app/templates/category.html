@@ -319,7 +319,6 @@
                     .attr("id", "y-axis")
                     .call(d3.axisLeft(yScale));
 
-
                 xAxisG
                     .append("text")
                     .attr("class", "xAxisLabel")
@@ -342,8 +341,8 @@
                     .style("opacity", 0);
 
                  var zoom = d3.zoom()
-                     .scaleExtent([1, 10])  // This control how much you can unzoom (x0.5) and zoom (x20)
-                     .extent([[0, 0], [innerWidth, innerHeight]])
+                     .scaleExtent([1, 10])  // This control how much you can unzoom (x1) and zoom (x10)
+                     //.extent([[0, 0], [innerWidth, innerHeight]])
                      .on("zoom", zoomed);
 
                 gScatterPlot.append("rect")
@@ -351,14 +350,13 @@
                     .attr("height", innerHeight)
                     .style("fill", "none")
                     .style("pointer-events", "all")
-                    .call(zoom);
+                    .call(zoom)
 
                 function zoomed() {
-
                     // recover the new scale
                     var newX = d3.event.transform.rescaleX(xScale);
                     var newY = d3.event.transform.rescaleY(yScale);
-
+                    
                     // update axes with these new boundaries
                     xAxisG.call(d3.axisBottom(newX))
                     yAxisG.call(d3.axisLeft(newY))
@@ -387,7 +385,6 @@
                     .attr("fill", (d) => (d.type == "A" ? color[1] : color[0]))
                     .attr("clip-path", "url(#clip)")
                     .style("stroke", "white")
-                    .call(zoom)
                     .on("mouseover", function (d) {
                         tooltip.transition().duration(100).style("opacity", 0.95);
                         tooltip
