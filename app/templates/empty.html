@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html style="overflow: hidden;">
     <head>
         <title>Youtube Trending</title>
         <script src="https://d3js.org/d3.v4.js"></script>
         <link rel="shortcut icon" href="static/images/icons/favicon.ico" type="image/x-icon">
     </head>
-    <body style="height: 95vh;">
-        <div id='sidebar' style="float: left; width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
-            <img src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%;">   
-
+    <body style="height: 100vh; width: 100%; display: flex; margin: 0px;">
+        <div id='sidebar' style="width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
+            <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; cursor: pointer;">   
+            <a href='http://www.kth.se' target="_blank" style="margin-left: 43%; color: mintcream;";>Info</a>
             <form action='/' method='POST' style="margin-left: 15%;">
-                <p style="color: mintcream;">Trending Time:</p>
-                <select name='time' id='select_time' style="font-size: large; width: 80%;">
-                    <option value='1w' selected>Last week</option>
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 5px; margin-top: 15px;">Trending Time:</p>
+                <select name='time' id='select_time' style="width: 80%; height: 24px;">
+                    <option value='1w' {% if selected[0] == '1w' %} selected {% endif %}>Last week</option>
+                    <option value='2w' {% if selected[0] == '2w' %} selected {% endif %}>Last 2 weeks</option>
                     <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
-                    <option value='3m' {% if selected[0] == '3m' %} selected {% endif %}>Last 3 months</option>
                     <option value='all' {% if selected[0] == 'all' %} selected {% endif %}>All</option>
                 </select>
                 <br>
-                <p style="color: mintcream;">Country:</p>
-                <select name='country' id='select_country' style="font-size: large; width: 80%;">
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 5px; margin-top: 10px;">Country:</p>
+                <select name='country' id='select_country' style="width: 80%; height: 24px;">
                     <option value='all' {% if selected[1] == 'all' %} selected {% endif %}>All</option>
                     <option value='br' {% if selected[1] == 'br' %} selected {% endif %}>Brazil</option>
                     <option value='ca' {% if selected[1] == 'ca' %} selected {% endif %}>Canada</option>
@@ -34,8 +34,8 @@
                     <option value='us' {% if selected[1] == 'us' %} selected {% endif %}>United States</option>
                 </select>
                 <br>
-                <p style="color: mintcream;">Language:</p>
-                <select name='lang' id='select_lang' style="font-size: large; width: 80%;">
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 5px; margin-top: 10px;">Language:</p>
+                <select name='lang' id='select_lang' style="width: 80%; height: 24px;">
                     <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
                     <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
                     <option value='ru' {% if selected[2] == 'ru' %} selected {% endif %}>русский</option>
@@ -56,8 +56,12 @@
                     <option value='ml' {% if selected[2] == 'ml' %} selected {% endif %}>മലയാളം</option>
                     <option value='zh' {% if selected[2] == 'zh' %} selected {% endif %}>中文</option>
                 </select>
-                <br><br><br>
-                <center style="margin-left: -18%;"><input type='submit' value='Filter' style="font-size: large;"></center>                
+                <br>
+                <p id='slider_text' style="color: mintcream; font-size: 14px; margin-bottom: 5px; margin-top: 15px;">Num in each category: {{ selected[3] }}</p>
+                <input type="range" name="numtop" id='slider' min="1" max="20" value="{{ selected[3] }}" style="width: 80%;">
+                <br>
+                <input type="text" name='placeholder' value='' style="visibility: hidden;">
+                <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: 16px;"></center>                
             </form>
 
         </div>
@@ -66,6 +70,14 @@
             <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
             <center style="font-size: 40px">{{ message }}</center>
         </div>
+
+        <script>
+            document.getElementById('logo').onclick = document.getElementById('filtersubmit').onclick;
+            document.getElementById('slider').onchange = function() {
+                document.getElementById('slider_text').innerText = 'Num in each category: ' + document.getElementById('slider').value;
+            }
+        </script>
+       
     </body>
 
 </html>

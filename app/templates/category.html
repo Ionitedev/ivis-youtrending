@@ -8,19 +8,19 @@
     </head>
     <body style="height: 100vh; width: 100%; display: flex; margin: 0px;">
         <div id='sidebar' style="width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
-            <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%; cursor: pointer;">
-
+            <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; cursor: pointer;">
+            <a href='/info' target="_blank" style="margin-left: 43%; color: mintcream;";>Info</a>
             <form action='/category' method='POST' style="margin-left: 15%;">
-                <p style="color: mintcream;">Trending Time:</p>
-                <select name='time' id='select_time' style="width: 80%; height: 28px;">
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 19px; margin-top: 15px;">Trending Time:</p>
+                <select name='time' id='select_time' style="width: 80%; height: 24px;">
                     <option value='1w' {% if selected[0] == '1w' %} selected {% endif %}>Last week</option>
                     <option value='2w' {% if selected[0] == '2w' %} selected {% endif %}>Last 2 weeks</option>
                     <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
                     <option value='all' {% if selected[0] == 'all' %} selected {% endif %}>All</option>
                 </select>
                 <br>
-                <p style="color: mintcream;">Country:</p>
-                <select name='country' id='select_country' style="width: 80%; height: 28px;">
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 19px; margin-top: 20px;">Country:</p>
+                <select name='country' id='select_country' style="width: 80%; height: 24px;">
                     <option value='all' {% if selected[1] == 'all' %} selected {% endif %}>All</option>
                     <option value='br' {% if selected[1] == 'br' %} selected {% endif %}>Brazil</option>
                     <option value='ca' {% if selected[1] == 'ca' %} selected {% endif %}>Canada</option>
@@ -35,8 +35,8 @@
                     <option value='us' {% if selected[1] == 'us' %} selected {% endif %}>United States</option>
                 </select>
                 <br>
-                <p style="color: mintcream;">Language:</p>
-                <select name='lang' id='select_lang' style="width: 80%; height: 28px;">
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 19px; margin-top: 21px;">Language:</p>
+                <select name='lang' id='select_lang' style="width: 80%; height: 24px;">
                     <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
                     <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
                     <option value='ru' {% if selected[2] == 'ru' %} selected {% endif %}>русский</option>
@@ -57,7 +57,7 @@
                     <option value='ml' {% if selected[2] == 'ml' %} selected {% endif %}>മലയാളം</option>
                     <option value='zh' {% if selected[2] == 'zh' %} selected {% endif %}>中文</option>
                 </select>
-                <br><br>
+                <br>
                 <input type="text" name='category' value='{{ category_name }}' style="visibility: hidden;">
                 <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: 16px;"></center>
             </form>
@@ -166,6 +166,13 @@
                     s.setAttribute('value', document.getElementById('select_' + filter[i]).value);
                     f.appendChild(s);
                 }
+
+                var s = document.createElement("input");
+                    s.setAttribute('style', 'visibility: hidden');
+                    s.setAttribute('type', "text");
+                    s.setAttribute('name', 'numtop');
+                    s.setAttribute('value', 5);
+                    f.appendChild(s);
 
                 document.getElementById('sidebar').appendChild(f);
                 f.submit();

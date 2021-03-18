@@ -7,19 +7,19 @@
     </head>
     <body style="height: 100vh; width: 100%; display: flex; margin: 0px;">
         <div id='sidebar' style="width: 15%; height: 100%; font-size: large; background-color: #991b1b;">
-            <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; margin-bottom: 10%; cursor: pointer;">   
-
+            <img id='logo' src='static/images/YouTrendingLOGO.png' width="80%" style="margin-left: 10%; margin-top: 10%; cursor: pointer;">   
+            <a href='/info' target="_blank" style="margin-left: 43%; color: mintcream;";>Info</a>
             <form action='/' method='POST' style="margin-left: 15%;">
-                <p style="color: mintcream;">Trending Time:</p>
-                <select name='time' id='select_time' style="width: 80%; height: 28px;">
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 5px; margin-top: 15px;">Trending Time:</p>
+                <select name='time' id='select_time' style="width: 80%; height: 24px;">
                     <option value='1w' {% if selected[0] == '1w' %} selected {% endif %}>Last week</option>
                     <option value='2w' {% if selected[0] == '2w' %} selected {% endif %}>Last 2 weeks</option>
                     <option value='1m' {% if selected[0] == '1m' %} selected {% endif %}>Last month</option>
                     <option value='all' {% if selected[0] == 'all' %} selected {% endif %}>All</option>
                 </select>
                 <br>
-                <p style="color: mintcream;">Country:</p>
-                <select name='country' id='select_country' style="width: 80%; height: 28px;">
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 5px; margin-top: 10px;">Country:</p>
+                <select name='country' id='select_country' style="width: 80%; height: 24px;">
                     <option value='all' {% if selected[1] == 'all' %} selected {% endif %}>All</option>
                     <option value='br' {% if selected[1] == 'br' %} selected {% endif %}>Brazil</option>
                     <option value='ca' {% if selected[1] == 'ca' %} selected {% endif %}>Canada</option>
@@ -34,8 +34,8 @@
                     <option value='us' {% if selected[1] == 'us' %} selected {% endif %}>United States</option>
                 </select>
                 <br>
-                <p style="color: mintcream;">Language:</p>
-                <select name='lang' id='select_lang' style="width: 80%; height: 28px;">
+                <p style="color: mintcream; font-size: 16px; margin-bottom: 5px; margin-top: 10px;">Language:</p>
+                <select name='lang' id='select_lang' style="width: 80%; height: 24px;">
                     <option value='all' {% if selected[2] == 'all' %} selected {% endif %}>All</option>
                     <option value='en' {% if selected[2] == 'en' %} selected {% endif %}>English</option>
                     <option value='ru' {% if selected[2] == 'ru' %} selected {% endif %}>русский</option>
@@ -56,7 +56,10 @@
                     <option value='ml' {% if selected[2] == 'ml' %} selected {% endif %}>മലയാളം</option>
                     <option value='zh' {% if selected[2] == 'zh' %} selected {% endif %}>中文</option>
                 </select>
-                <br><br>
+                <br>
+                <p id='slider_text' style="color: mintcream; font-size: 14px; margin-bottom: 5px; margin-top: 15px;">Num in each category: {{ selected[3] }}</p>
+                <input type="range" name="numtop" id='slider' min="1" max="20" value="{{ selected[3] }}" style="width: 80%;">
+                <br>
                 <input type="text" name='placeholder' value='' style="visibility: hidden;">
                 <center style="margin-left: -18%;"><input id='filtersubmit' type='submit' value='Filter' style="font-size: 16px;"></center>                
             </form>
@@ -74,6 +77,10 @@
             }
 
             document.getElementById('logo').onclick = document.getElementById('filtersubmit').onclick;
+            document.getElementById('slider').onchange = function() {
+                document.getElementById('slider_text').innerText = 'Num in each category: ' + document.getElementById('slider').value;
+            }
+
 
             // set the dimensions and margins of the graph
             var margin = {top: 0, right: 10, bottom: 0, left: 10},
@@ -106,6 +113,7 @@
                                 'trenddate2': "{{v['trenddate2']}}",
                                 'cover_url': "{{v['cover_url']}}",
                                 'url': "{{v['url']}}",
+                                'show_title': {{ v['show_title'] }}
                             },
                         {% endfor %}
                         ]
@@ -150,14 +158,15 @@
                 .attr("class", "tooltip")
                 .attr('id', 'tooltip')
                 .style('position', 'absolute')
-                .style("background-color", "white")
-                .style("border", "solid")
-                .style("border-width", "2px")
-                .style("border-radius", "5px")
+                //.style("background-color", "white")
+                //.style("border", "solid")
+                //.style("border-width", "2px")
+                //.style("border-radius", "5px")
                 .style("padding", "5px")
                 .style('visibility', 'hidden')
                 .style('font-size', '12px')
                 .style('font-weight', 'bold')
+                .style('color', 'white')
                 .style('width', '180px')                
                 .style("left", "-100%")
                 .style("top", "-100%")
@@ -178,19 +187,21 @@
                         'Last trending: ' + d.data.trenddate2 + '<br>' +
                         'View: ' + d.data.count
                     )
-                
-                if (parseInt(d3.select(this).attr("x")) > window.innerWidth * 0.65) {
-                    Tooltip.style("left", (parseInt(d3.select(this).attr("x")) - 30) + "px")
-                }
-                else {
-                    Tooltip.style("left", (parseInt(d3.select(this).attr("x")) + window.innerWidth * 0.15 + 25) + "px")
-                }
-                if (parseInt(d3.select(this).attr("y")) > window.innerHeight * 0.5) {
-                    Tooltip.style("top", (parseInt(d3.select(this).attr("y")) - 280 )  + "px")
-                }
-                else {
-                    Tooltip.style("top", (parseInt(d3.select(this).attr("y")) + 15 )  + "px")
-                }
+                    .style('left', '20px')
+                    .style('top', 0.54 * window.innerHeight + 'px')
+
+                // if (parseInt(d3.select(this).attr("x")) > window.innerWidth * 0.65) {
+                //     Tooltip.style("left", (parseInt(d3.select(this).attr("x")) - 30) + "px")
+                // }
+                // else {
+                //     Tooltip.style("left", (parseInt(d3.select(this).attr("x")) + window.innerWidth * 0.15 + 25) + "px")
+                // }
+                // if (parseInt(d3.select(this).attr("y")) > window.innerHeight * 0.5) {
+                //     Tooltip.style("top", (parseInt(d3.select(this).attr("y")) - 280 )  + "px")
+                // }
+                // else {
+                //     Tooltip.style("top", (parseInt(d3.select(this).attr("y")) + 15 )  + "px")
+                // }
             }
             
             var mouseleave = function(d) {
@@ -202,8 +213,6 @@
         
             document.getElementById('sidebar').addEventListener("mouseover", mouseleave);
 
-            // use this information to add rectangles:
-            //d 是node
             svg
                 .selectAll("rect")
                 .data(root.leaves())
@@ -214,6 +223,7 @@
                 .attr('width', function (d) { return (d.x1 - d.x0); })
                 .attr('height', function (d) { return (d.y1 - d.y0); })
                 .on("mouseover", mouseover)
+                .on('mouseout', mouseleave)
                 .style("stroke", "black")
                 .style("fill", function(d) { return color(d.parent.data.name) })
                 .style("opacity", function(d) { return opacity(d.data.color_value) })
@@ -227,9 +237,12 @@
                 .attr("y", function(d) { return d.y0 - 25 })
                 .attr("width", function(d) { return d.x1 - d.x0 })
                 .attr("height", function(d) { return d.y1 - d.y0 })
+                .style('cursor', 'pointer')
                 .on("mouseover", mouseover)
+                .on('mouseout', mouseleave)
+                .on('click', function(d) { window.open(d.data.url, '_blank'); })
                 .append("xhtml:body")
-                .html(function(d) { return '<a style="color: white; font-size: 15px; text-decoration: none" target="_blank" href="' + d.data.url + '">' + d.data.title + '</a>'})
+                .html(function(d) { if (d.data.show_title == 0) return ''; else return '<p style="color: white; font-size: 14px; margin-top: 10px">' + d.data.title + '</a>'; })
 
             // category name
             svg

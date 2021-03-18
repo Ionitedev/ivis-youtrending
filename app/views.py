@@ -7,9 +7,9 @@ import math
 @app.route('/', methods=['GET', 'POST'])
 def index_page():
     if request.method == 'GET':
-        selected = ['all', 'all', 'all']
+        selected = ['all', 'all', 'all', '5']
     else:
-        selected = [request.form['time'], request.form['country'], request.form['lang']]
+        selected = [request.form['time'], request.form['country'], request.form['lang'], request.form['numtop']]
         
     selected_index = set(full_data.keys())
 
@@ -29,20 +29,25 @@ def index_page():
     selected_category = {x[0]: x[1] for x in ((i, selected_index.intersection(category_index[i])) for i in category_index) if len(x[1]) > 0}
     selected_category_count = {i: sum(full_data[x][8] for x in selected_category[i]) for i in selected_category}
     category_order = sorted(selected_category_count.keys(), key=lambda x:selected_category_count[x], reverse=True)
-    selected_category_top = {i: sorted(selected_category[i], key=lambda x: full_data[x][8], reverse=True)[:5] for i in selected_category}
+    selected_category_top = {i: sorted(selected_category[i], key=lambda x: full_data[x][8], reverse=True)[:int(selected[3])] for i in selected_category}
     
     for c in selected_category_top:
         for i, v in enumerate(selected_category_top[c]):
             selected_category_top[c][i] = attr_for_homepage(full_data, v)
         
-        ref_view_count = min(i['count'] for i in selected_category_top[c]) / 5
+        ref_view_count = min(i['count'] for i in selected_category_top[c])
         for v in selected_category_top[c]:
             v['color_value'] = 1.01 - v['days'] / {'1w': 7, '2w': 14, '1m': 30, 'all': 90}[selected[0]]
-            v['size_value'] = math.log(v['count'] / ref_view_count) / sum(math.log(i['count'] / ref_view_count) for i in selected_category_top[c]) * math.log(selected_category_count[c] / 10000)
+            v['size_value'] = (v['count'] / ref_view_count) / sum((i['count'] / ref_view_count) for i in selected_category_top[c]) * math.log(selected_category_count[c] / 10000)
 
         ref_color = max(v['color_value'] for v in selected_category_top[c])
         for v in selected_category_top[c]:
             v['color_value'] /= ref_color
+
+    total_size = sum(v['size_value'] for v in selected_category_top[c] for c in selected_category_top)
+    for c in selected_category_top:
+        for v in selected_category_top[c]:
+            v['show_title'] = 1 if v['size_value'] / total_size > 0.004 else 0
 
     feed_data = [(category_names[str(i)], selected_category_top[i]) for i in category_order]
     
@@ -84,7 +89,6 @@ def category_page():
     tag_sorted_frequency = sorted(tag_selected, key=lambda x: tag_frequency[x], reverse=True)
     rank_map_view = rank_map(tag_view, reverse=True)
     rank_map_frequency = rank_map(tag_frequency, reverse=True)
-    print(rank_map_frequency)
     tag_num = len(tag_selected)
     
     # delete before submission
@@ -122,3 +126,7 @@ def category_page():
         feed_data[3] = [attr_for_taglist(full_data, i, set(feed_data[2])) for i in top_video]
 
     return render_template('category.html', selected=selected, category_name=request.form['category'], search=search, feed_data=feed_data)
+
+@app.route('/info', methods=['GET'])
+def info_page():
+    return 'nothing'
