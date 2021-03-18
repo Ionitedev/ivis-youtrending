@@ -7,7 +7,7 @@ import math
 @app.route('/', methods=['GET', 'POST'])
 def index_page():
     if request.method == 'GET':
-        selected = ['all', 'all', 'all', '5']
+        selected = ['all', 'all', 'all', '8']
     else:
         selected = [request.form['time'], request.form['country'], request.form['lang'], request.form['numtop']]
         
