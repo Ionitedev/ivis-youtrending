@@ -30,7 +30,10 @@ def index_page():
     selected_category_count = {i: sum(full_data[x][8] for x in selected_category[i]) for i in selected_category}
     category_order = sorted(selected_category_count.keys(), key=lambda x:selected_category_count[x], reverse=True)
     selected_category_top = {i: sorted(selected_category[i], key=lambda x: full_data[x][8], reverse=True)[:int(selected[3])] for i in selected_category}
-    
+
+    if len(selected_category_top) == 0:
+        return render_template('empty.html', selected=selected, message='No result')
+
     for c in selected_category_top:
         for i, v in enumerate(selected_category_top[c]):
             selected_category_top[c][i] = attr_for_homepage(full_data, v)
