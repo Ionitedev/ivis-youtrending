@@ -242,7 +242,7 @@
                 .on('mouseout', mouseleave)
                 .on('click', function(d) { window.open(d.data.url, '_blank'); })
                 .append("xhtml:body")
-                .html(function(d) { if (d.data.show_title == 0) return ''; else return '<p style="color: white; font-size: 13px;">' + d.data.title + '</a>'; })
+                .html(function(d) { if (d.data.show_title == 0) return ''; else return '<p style="color: white; font-size: 13px;">' + d.data.title + '</p>'; })
 
             // category name
             svg
