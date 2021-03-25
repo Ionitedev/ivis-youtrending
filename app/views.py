@@ -30,18 +30,15 @@ def index_page():
     selected_category_count = {i: sum(full_data[x][8] for x in selected_category[i]) for i in selected_category}
     category_order = sorted(selected_category_count.keys(), key=lambda x:selected_category_count[x], reverse=True)
     selected_category_top = {i: sorted(selected_category[i], key=lambda x: full_data[x][8], reverse=True)[:int(selected[3])] for i in selected_category}
-
     if len(selected_category_top) == 0:
         return render_template('empty.html', selected=selected, message='No result')
-
     for c in selected_category_top:
         for i, v in enumerate(selected_category_top[c]):
             selected_category_top[c][i] = attr_for_homepage(full_data, v)
-        
-        ref_view_count = min(i['count'] for i in selected_category_top[c])
         for v in selected_category_top[c]:
             v['color_value'] = 1.01 - v['days'] / {'1w': 7, '2w': 14, '1m': 30, 'all': 90}[selected[0]]
-            v['size_value'] = (v['count'] / ref_view_count) / sum((i['count'] / ref_view_count) for i in selected_category_top[c]) * math.log(selected_category_count[c] / 10000)
+            v['size_value'] = (v['count'])
+            #v['size_value'] = (v['count'] / ref_view_count) / sum((i['count'] / ref_view_count) for i in selected_category_top[c]) * math.log(selected_category_count[c] / 10000)
 
         ref_color = max(v['color_value'] for v in selected_category_top[c])
         for v in selected_category_top[c]:
@@ -51,7 +48,14 @@ def index_page():
     for c in selected_category_top:
         for v in selected_category_top[c]:
             v['show_title'] = 1 if v['size_value'] / total_size > 0.004 else 0
-
+            v['size_value']=v['size_value']/(total_size)
+    new_order={}
+    for i in category_order:
+        new_order[i]=sum(v['count'] for v in selected_category_top[i])
+    new_order=sorted(new_order.items(), key=lambda x: x[1], reverse=True)
+    category_order=[]
+    for (key,value) in new_order:
+        category_order.append(key)
     feed_data = [(category_names[str(i)], selected_category_top[i]) for i in category_order]
     
     if len(feed_data) == 0:
